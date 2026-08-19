@@ -16,7 +16,7 @@ const display = Fraunces({
   variable: '--font-fraunces',
   subsets: ['latin'],
   display: 'swap',
-  axes: ['SOFT', 'WONK', 'opsz'],
+  axes: ['SOFT', 'WONK'],
 })
 
 const body = Newsreader({
@@ -30,7 +30,7 @@ const meta = IBM_Plex_Mono({
   variable: '--font-plex-mono',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500'],
+  weight: ['400'],
 })
 
 /**
