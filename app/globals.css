@@ -69,6 +69,28 @@ a {
 }
 
 /**
+ * The surfaces the browser draws for us still belong to the design.
+ *
+ * The default focus ring is a blue that appears nowhere else on this site and
+ * sits weakly on paper. This is the same ink the rules are drawn in, offset so
+ * it reads as a deliberate outline rather than a halo, and it appears only for
+ * keyboard users — :focus-visible, not :focus, so a mouse click on a link does
+ * not leave a box behind it.
+ */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Figures for reading: dates, issue numbers and reading times line up in
+   columns instead of jittering between rows. */
+time,
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/**
  * Nothing on this site animates on scroll, and the only transition is the
  * 150ms on links. This is still here because it is the kind of thing the
  * audience checks, and because a future component should inherit the rule

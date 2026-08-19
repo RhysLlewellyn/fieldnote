@@ -31,7 +31,11 @@ function Caption({caption, credit}: {caption?: string; credit?: string}) {
   if (!caption && !credit) return null
 
   return (
-    <figcaption className="mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-1 font-meta text-[0.7rem] leading-relaxed tracking-[0.14em] text-muted uppercase">
+    /* Mono and muted, but not uppercase. The art direction sets metadata in
+       caps; a caption is a sentence, and an 83-character sentence in tracked
+       uppercase is measurably harder to read — we recognise words by their
+       ascenders and descenders, which caps remove. */
+    <figcaption className="mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-1 font-meta text-[0.72rem] leading-relaxed tracking-[0.02em] text-muted">
       <span>{caption}</span>
       {credit ? <span>{credit}</span> : null}
     </figcaption>

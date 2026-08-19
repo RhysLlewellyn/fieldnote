@@ -97,9 +97,11 @@ export default async function ArticlePage({params}: Props) {
         <div className="aspect-[8/5] overflow-hidden">
           <RisoArt seed={article.slug} width={1000} height={625} />
         </div>
-        <figcaption className="mx-auto mt-2.5 flex max-w-[34rem] flex-wrap justify-between gap-x-6 font-meta text-[0.7rem] tracking-[0.14em] text-muted uppercase">
-          <span>{article.title}</span>
-          <span>Riso — generated</span>
+        {/* Credit only. The caption used to repeat the headline word for word
+            directly beneath it, which told the reader nothing they had not
+            just read and put a 61-character sentence in tracked uppercase. */}
+        <figcaption className="mx-auto mt-2.5 max-w-[34rem] text-right font-meta text-[0.7rem] tracking-[0.14em] text-muted uppercase">
+          Riso — generated from the slug
         </figcaption>
       </figure>
 
