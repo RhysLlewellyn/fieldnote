@@ -1,0 +1,14 @@
+# Normalise line endings in the repository to LF.
+#
+# Without this, files committed from Windows carry CRLF into the index, and
+# every later `git add` on another machine — or after a core.autocrlf change —
+# rewrites whole files with identical content. That shows up as a diff of
+# twenty-odd files whose insertions exactly equal their deletions, which hides
+# real changes and makes review pointless.
+* text=auto eol=lf
+
+# Binary, so never touched.
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary
