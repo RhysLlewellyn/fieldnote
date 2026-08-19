@@ -5,7 +5,7 @@ export async function SiteFooter() {
 
   return (
     <footer className="mt-24 border-t border-rule">
-      <div className="mx-auto flex max-w-[1100px] flex-wrap items-baseline justify-between gap-x-10 gap-y-3 px-8 py-8 font-meta text-[0.7rem] tracking-[0.14em] text-muted uppercase">
+      <div className="mx-auto flex max-w-[1100px] flex-col gap-3 px-8 py-8 font-meta text-[0.7rem] tracking-[0.14em] text-muted uppercase sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-10">
         <p>{settings?.footerText ?? null}</p>
 
         {settings?.socialLinks?.length ? (

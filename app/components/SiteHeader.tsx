@@ -12,7 +12,12 @@ export async function SiteHeader() {
 
   return (
     <header className="border-b border-rule">
-      <div className="mx-auto flex max-w-[1100px] flex-wrap items-baseline justify-between gap-x-10 gap-y-3 px-8 py-5">
+      {/* A column on small screens, a row once there is space, rather than
+          flex-wrap. Wrapping made the number of rows depend on how wide the
+          nav text happened to be, which changes when the mono face swaps in
+          for its fallback — the header changed height mid-load and pushed the
+          whole page down with it. Fixed rows, no shift. */}
+      <div className="mx-auto flex max-w-[1100px] flex-col gap-3 px-8 py-5 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-10">
         <Link
           href="/"
           className="font-display text-[1.35rem] font-normal tracking-[-0.02em] hover:text-ochre"
