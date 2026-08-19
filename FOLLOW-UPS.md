@@ -24,13 +24,18 @@ wrong if anyone might actually try to make contact through the site.
 Portable Text blocks; the build has pull quote, captioned image, gallery and
 aside. Adding it is a feature, which this pass was explicitly scoped out of.
 
-**Largest Contentful Paint is 2.7s on an article.** Green overall at 96, but
-LCP itself is amber — Lighthouse wants under 2.5s. The remaining cost is ~180KB
-of preloaded webfonts, and the LCP element is the standfirst, set in Newsreader
-italic. Every remaining lever trades typography for milliseconds: `font-display:
-optional` would pin first-time mobile visitors to a fallback face, and dropping
-the italic would mean synthesised obliques. Both are the wrong trade for a site
-whose audience is design studios.
+**Largest Contentful Paint is 2.8–2.9s.** Green overall, but LCP itself is
+amber — Lighthouse wants under 2.5s. The remaining cost is ~190KB of preloaded
+webfonts, and the LCP element is text set in them. Every remaining lever trades
+typography for milliseconds: `font-display: optional` would pin first-time
+mobile visitors to a fallback face, and dropping the Newsreader italic would
+mean synthesised obliques. Both are the wrong trade for a site whose audience
+is design studios.
+
+**The article's performance score sits close to the 95 line.** Across three
+runs it scored 94, 96 and 96, and the homepage 95, 96 and 97. Lighthouse's
+simulated throttling has a few points of variance, so a slow run can put the
+article just under. Getting comfortable headroom means the LCP work above.
 
 ## P3 — cosmetic, or a decision to record rather than a defect
 

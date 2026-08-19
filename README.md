@@ -14,19 +14,29 @@ default mobile profile — simulated 4G and a 4x CPU slowdown.
 
 | | Performance | Accessibility | Best Practices | SEO |
 | --- | --- | --- | --- | --- |
-| [Homepage](https://fieldnote-one.vercel.app) | 96 | 100 | 100 | 100 |
+| [Homepage](https://fieldnote-one.vercel.app) | 95 | 100 | 100 | 100 |
 | [Article](https://fieldnote-one.vercel.app/articles/tideline-moves-twice-a-day) | 96 | 100 | 100 | 100 |
 
-Homepage: FCP 1.2s, LCP 2.8s, TBT 10ms, CLS 0, Speed Index 1.9s.
-Article: FCP 1.0s, LCP 2.7s, TBT 20ms, CLS 0, Speed Index 1.0s.
+Homepage: FCP 0.8s, LCP 2.9s, TBT 30ms, CLS 0, Speed Index 2.4s.
+Article: FCP 1.0s, LCP 2.8s, TBT 10ms, CLS 0, Speed Index 1.0s.
+
+Performance is the only category that moves between runs. Across three
+measurements the homepage scored 95, 96 and 97, and the article 94, 96 and 96 —
+Lighthouse's simulated throttling has a few points of variance, and the article
+sits close enough to 95 that a slow run can dip below it. The other three
+categories are 100 every time. The numbers above are from the run captured in
+the screenshots.
 
 ![Lighthouse report for the homepage](docs/lighthouse-home.png)
 
 ![Lighthouse report for an article page](docs/lighthouse-article.png)
 
-Cumulative Layout Shift is 0 on both, which is the number worth looking at:
-every image is generated at a known aspect ratio and every font is loaded with
-a metric-matched fallback, so nothing moves once it has painted.
+Cumulative Layout Shift is 0 on both. That is worth stating carefully, because
+an earlier version of this build also reported 0 for the wrong reason: the
+typefaces were not rendering at all, so there was no font swap to shift
+anything. With Fraunces, Newsreader and IBM Plex Mono actually applied, holding
+CLS at 0 means the metric-matched fallbacks and the fixed-row header are doing
+their job.
 
 ## Studio demo access
 
