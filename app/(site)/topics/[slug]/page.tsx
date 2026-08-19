@@ -1,7 +1,7 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
 
-import {sanityFetch} from '@/sanity/lib/fetch'
+import {sanityFetch, sanityFetchPublished} from '@/sanity/lib/fetch'
 import {topicBySlugQuery, topicSlugsQuery} from '@/sanity/lib/queries'
 import type {Topic} from '@/sanity/lib/types'
 
@@ -19,7 +19,7 @@ function getTopic(slug: string) {
 }
 
 export async function generateStaticParams() {
-  const slugs = await sanityFetch<string[]>({
+  const slugs = await sanityFetchPublished<string[]>({
     query: topicSlugsQuery,
     tags: ['topic'],
   })

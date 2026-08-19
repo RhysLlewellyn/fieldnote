@@ -1,3 +1,7 @@
+import {draftMode} from 'next/headers'
+import {VisualEditing} from 'next-sanity/visual-editing'
+
+import {DraftModeBanner} from '@/app/components/DraftModeBanner'
 import {SiteFooter} from '@/app/components/SiteFooter'
 import {SiteHeader} from '@/app/components/SiteHeader'
 
@@ -5,13 +9,26 @@ import {SiteHeader} from '@/app/components/SiteHeader'
  * The chrome every page of the site proper gets: header, footer, and a main
  * landmark between them. The Studio sits outside this group and so gets none
  * of it.
+ *
+ * VisualEditing is what makes the Presentation tool interactive — it reads the
+ * stega-encoded ids in the rendered text and turns them into click targets
+ * that open the right field in the Studio. It is mounted only in draft mode,
+ * so a reader never downloads it.
  */
-export default function SiteLayout({children}: {children: React.ReactNode}) {
+export default async function SiteLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const {isEnabled: isDraft} = await draftMode()
+
   return (
     <div className="flex min-h-screen flex-col">
+      {isDraft ? <DraftModeBanner /> : null}
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      {isDraft ? <VisualEditing /> : null}
     </div>
   )
 }

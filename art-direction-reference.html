@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fieldnote — art direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Newsreader:opsz,wght@6..72,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F4EE;
+    --paper-2:#EFEAE0;
+    --ink:#14120F;
+    --ink-2:#3A352E;
+    --muted:#7A7266;
+    --rule:#DDD5C7;
+    --ochre:#B8642A;
+    --moss:#3D5142;
+
+    --display:"Fraunces",Georgia,serif;
+    --body:"Newsreader",Georgia,serif;
+    --meta:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-size:18px;line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:0 32px}
+  section{padding:72px 0;border-bottom:1px solid var(--rule)}
+  .label{
+    font-family:var(--meta);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 28px
+  }
+
+  /* ---- masthead ---- */
+  .masthead{padding:88px 0 64px;border-bottom:2px solid var(--ink)}
+  .masthead h1{
+    font-family:var(--display);
+    font-optical-sizing:auto;
+    font-size:clamp(3.5rem,11vw,9rem);
+    font-weight:300;line-height:.86;letter-spacing:-.035em;
+    margin:0;font-variation-settings:"SOFT" 20,"WONK" 1;
+  }
+  .masthead .sub{
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    font-family:var(--meta);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin-top:28px
+  }
+
+  /* ---- palette ---- */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px}
+  .sw{border:1px solid var(--rule)}
+  .sw i{display:block;height:96px}
+  .sw span{
+    display:block;padding:10px 12px;font-family:var(--meta);
+    font-size:11px;letter-spacing:.06em;color:var(--muted)
+  }
+  .sw b{display:block;color:var(--ink);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+
+  /* ---- type scale ---- */
+  .scale > div{
+    display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:baseline;
+    padding:18px 0;border-top:1px solid var(--rule)
+  }
+  .scale .tag{font-family:var(--meta);font-size:11px;color:var(--muted);letter-spacing:.08em}
+  .d1{font-family:var(--display);font-weight:300;font-size:4rem;line-height:.95;letter-spacing:-.03em;font-variation-settings:"SOFT" 20,"WONK" 1}
+  .d2{font-family:var(--display);font-weight:400;font-size:2.5rem;line-height:1.08;letter-spacing:-.02em}
+  .d3{font-family:var(--display);font-weight:500;font-size:1.5rem;line-height:1.2}
+  .bd{font-family:var(--body);font-size:1.125rem;line-height:1.7}
+  .sm{font-family:var(--meta);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  /* ---- riso art ---- */
+  .riso-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+  .riso{aspect-ratio:4/5;background:var(--paper-2);position:relative;overflow:hidden;border:1px solid var(--rule)}
+  .riso svg{width:100%;height:100%;display:block}
+  .riso .blend{mix-blend-mode:multiply}
+
+  /* ---- article specimen ---- */
+  .article{max-width:34rem;margin:0 auto}
+  .kicker{font-family:var(--meta);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+  .article h2{
+    font-family:var(--display);font-weight:300;
+    font-size:clamp(2.25rem,5vw,3.25rem);line-height:1.02;letter-spacing:-.028em;
+    margin:.4em 0 .3em;font-variation-settings:"SOFT" 20,"WONK" 1
+  }
+  .standfirst{font-size:1.3rem;line-height:1.5;color:var(--ink-2);font-style:italic;margin:0 0 32px}
+  .byline{
+    font-family:var(--meta);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:36px
+  }
+  .article p{margin:0 0 1.35em;hanging-punctuation:first last}
+  .article > p:first-of-type::first-letter{
+    font-family:var(--display);font-weight:400;float:left;
+    font-size:4.6em;line-height:.78;padding:.06em .09em 0 0;color:var(--ochre)
+  }
+  figure{margin:40px 0}
+  figure .art{aspect-ratio:16/10;border:1px solid var(--rule);overflow:hidden;background:var(--paper-2)}
+  figcaption{
+    font-family:var(--meta);font-size:11px;line-height:1.6;color:var(--muted);
+    margin-top:10px;display:flex;gap:16px
+  }
+  figcaption .credit{margin-left:auto;white-space:nowrap}
+  blockquote{
+    margin:44px 0;padding:0;border:0;
+    border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    padding:28px 0
+  }
+  blockquote p{
+    font-family:var(--display);font-weight:300;font-size:1.85rem;line-height:1.18;
+    letter-spacing:-.02em;margin:0;font-variation-settings:"SOFT" 20,"WONK" 1
+  }
+  blockquote cite{
+    display:block;margin-top:16px;font-family:var(--meta);font-style:normal;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)
+  }
+  aside.note{
+    border-left:3px solid var(--moss);padding:4px 0 4px 20px;margin:36px 0;
+    font-size:.95rem;line-height:1.6;color:var(--ink-2)
+  }
+  aside.note b{
+    display:block;font-family:var(--meta);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--moss);margin-bottom:6px;font-weight:500
+  }
+
+  /* ---- index specimen ---- */
+  .index{border-top:1px solid var(--rule)}
+  .row{
+    display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:baseline;
+    padding:22px 0;border-bottom:1px solid var(--rule)
+  }
+  .row .n{font-family:var(--meta);font-size:11px;color:var(--muted)}
+  .row .t{font-family:var(--display);font-weight:400;font-size:1.6rem;letter-spacing:-.015em;line-height:1.15}
+  .row .t em{display:block;font-family:var(--meta);font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  .row .m{font-family:var(--meta);font-size:11px;color:var(--muted);white-space:nowrap}
+
+  .rules{columns:2;column-gap:48px;font-size:.95rem;color:var(--ink-2)}
+  .rules p{break-inside:avoid;margin:0 0 1.1em}
+  .rules strong{color:var(--ink)}
+  @media(max-width:720px){
+    .rules{columns:1}
+    .scale > div{grid-template-columns:1fr;gap:6px}
+    .row{grid-template-columns:1fr;gap:6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>Fieldnote</h1>
+    <div class="sub">
+      <span>A quarterly of landscape, craft &amp; slow travel</span>
+      <span>Art direction — v1</span>
+    </div>
+  </header>
+
+  <section>
+    <p class="label">Palette</p>
+    <div class="swatches">
+      <div class="sw"><i style="background:#F7F4EE"></i><span><b>Paper</b>#F7F4EE</span></div>
+      <div class="sw"><i style="background:#EFEAE0"></i><span><b>Paper 2</b>#EFEAE0</span></div>
+      <div class="sw"><i style="background:#14120F"></i><span><b>Ink</b>#14120F</span></div>
+      <div class="sw"><i style="background:#7A7266"></i><span><b>Muted</b>#7A7266</span></div>
+      <div class="sw"><i style="background:#B8642A"></i><span><b>Ochre</b>#B8642A</span></div>
+      <div class="sw"><i style="background:#3D5142"></i><span><b>Moss</b>#3D5142</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Type scale — Fraunces / Newsreader / IBM Plex Mono</p>
+    <div class="scale">
+      <div><span class="tag">display / 64</span><span class="d1">Ridgeline</span></div>
+      <div><span class="tag">h2 / 40</span><span class="d2">The long way round</span></div>
+      <div><span class="tag">h3 / 24</span><span class="d3">Notes from the col</span></div>
+      <div><span class="tag">body / 18</span><span class="bd">Serif body at 1.7 leading, measure held to 34rem — roughly 66 characters.</span></div>
+      <div><span class="tag">meta / 11</span><span class="sm">Issue 03 · Autumn 2026 · 14 min read</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Imagery — generative riso, never photography</p>
+    <div class="riso-row">
+      <div class="riso">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g class="blend" opacity=".85">
+            <path d="M0 380 L120 210 L215 330 L300 180 L400 340 L400 500 L0 500Z" fill="#3D5142"/>
+          </g>
+          <g class="blend" opacity=".8">
+            <path d="M0 430 L95 300 L190 400 L285 265 L400 415 L400 500 L0 500Z" fill="#B8642A"/>
+          </g>
+          <circle cx="300" cy="110" r="52" fill="#B8642A" opacity=".55" class="blend"/>
+        </svg>
+      </div>
+      <div class="riso">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g class="blend">
+            <ellipse cx="150" cy="250" rx="130" ry="180" fill="#3D5142" opacity=".7"/>
+            <ellipse cx="250" cy="290" rx="130" ry="180" fill="#B8642A" opacity=".6"/>
+          </g>
+        </svg>
+      </div>
+      <div class="riso">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g class="blend" opacity=".75" fill="none" stroke="#3D5142" stroke-width="2">
+            <path d="M-20 120 Q 120 60 200 130 T 420 110"/>
+            <path d="M-20 180 Q 120 120 200 190 T 420 170"/>
+            <path d="M-20 240 Q 120 180 200 250 T 420 230"/>
+            <path d="M-20 300 Q 120 240 200 310 T 420 290"/>
+            <path d="M-20 360 Q 120 300 200 370 T 420 350"/>
+          </g>
+          <rect x="60" y="330" width="150" height="150" fill="#B8642A" opacity=".5" class="blend"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Article</p>
+    <article class="article">
+      <p class="kicker">Field report</p>
+      <h2>The long way round</h2>
+      <p class="standfirst">Three weeks tracing an old drovers' route across the Cambrians, and what the map leaves out.</p>
+      <div class="byline"><span>Words — Elin Prosser</span><span>Issue 03 · 14 min</span></div>
+
+      <p>The path begins where the tarmac gives up, at a gate that has not been painted in forty years and does not need to be. There is no sign. The route survives in the shape of the land itself — a shallow trough worn into the hillside by four centuries of cattle walking east, so faint in summer that you lose it whenever the bracken closes over, and so obvious in low winter light that you wonder how anyone could miss it.</p>
+
+      <p>Drovers moved livestock from the Welsh uplands to the markets of England along a network of these routes, choosing high ground over the valley roads to avoid tolls and keep the animals' feet dry. What they left behind is not infrastructure. It is a preference, repeated, until the ground remembered.</p>
+
+      <figure>
+        <div class="art">
+          <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%;display:block">
+            <g style="mix-blend-mode:multiply" opacity=".8">
+              <path d="M0 340 L160 190 L300 300 L430 160 L580 290 L700 210 L800 320 L800 500 L0 500Z" fill="#3D5142"/>
+            </g>
+            <g style="mix-blend-mode:multiply" opacity=".75">
+              <path d="M0 410 L180 280 L320 380 L470 250 L620 370 L740 300 L800 380 L800 500 L0 500Z" fill="#B8642A"/>
+            </g>
+          </svg>
+        </div>
+        <figcaption><span>The eastern col, looking back toward Abergwesyn.</span><span class="credit">Riso — E. Prosser</span></figcaption>
+      </figure>
+
+      <blockquote>
+        <p>The ground remembers what the map has already forgotten.</p>
+        <cite>— Elin Prosser</cite>
+      </blockquote>
+
+      <p>By the third day the walking had stopped being a means of getting anywhere. The distances were small and the days were long, and the only real decision each morning was whether to follow the line on the paper or the line under the feet. They diverge more often than you would expect.</p>
+
+      <aside class="note">
+        <b>Note</b>
+        The Abergwesyn pass is unsurfaced for eleven miles and has no phone signal along its length. Carry water; the streams above the col are seasonal.
+      </aside>
+
+      <p>What the map leaves out is not detail. It is duration — the fact that a mile of this ground is not a mile of any other, and that the route was never designed to be efficient, only survivable, and only for animals that had all day.</p>
+    </article>
+  </section>
+
+  <section>
+    <p class="label">Index</p>
+    <div class="index">
+      <div class="row"><span class="n">01</span><span class="t">The long way round<em>Field report · Elin Prosser</em></span><span class="m">14 min</span></div>
+      <div class="row"><span class="n">02</span><span class="t">Thirty years of one chair<em>Craft · Tomas Bregl</em></span><span class="m">9 min</span></div>
+      <div class="row"><span class="n">03</span><span class="t">The last night train to Cluj<em>Slow travel · Marta Enescu</em></span><span class="m">21 min</span></div>
+      <div class="row"><span class="n">04</span><span class="t">Green oak, and waiting<em>Craft · Iona Shaw</em></span><span class="m">6 min</span></div>
+    </div>
+  </section>
+
+  <section style="border-bottom:0">
+    <p class="label">Rules the build must hold</p>
+    <div class="rules">
+      <p><strong>Measure.</strong> Body copy never exceeds 34rem, roughly 66 characters. Pull quotes and figures may break the measure; nothing else may.</p>
+      <p><strong>One accent per view.</strong> Ochre for editorial emphasis, moss for structural asides. Never both in the same component.</p>
+      <p><strong>Imagery is generated, never photographed.</strong> Two-colour riso forms built from SVG, multiply blend, on paper. No stock, no AI images, ever.</p>
+      <p><strong>Metadata is mono.</strong> Every date, byline, reading time, issue number and caption is IBM Plex Mono, 11px, .12em tracking, uppercase.</p>
+      <p><strong>Rules over boxes.</strong> Structure is expressed with hairline rules and whitespace. No cards, no drop shadows, no rounded corners.</p>
+      <p><strong>The drop cap is ochre and appears once.</strong> First paragraph of an article only. Never in an aside, never in a listing.</p>
+      <p><strong>Optical alignment.</strong> Hanging punctuation on body copy. Negative letter-spacing on display sizes, never on body.</p>
+      <p><strong>Motion is near-absent.</strong> A 150ms colour transition on links. Nothing moves on scroll. <code>prefers-reduced-motion</code> honoured regardless.</p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

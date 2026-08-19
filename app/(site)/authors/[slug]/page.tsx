@@ -1,7 +1,7 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
 
-import {sanityFetch} from '@/sanity/lib/fetch'
+import {sanityFetch, sanityFetchPublished} from '@/sanity/lib/fetch'
 import {authorBySlugQuery, authorSlugsQuery} from '@/sanity/lib/queries'
 import type {Author} from '@/sanity/lib/types'
 
@@ -21,7 +21,7 @@ function getAuthor(slug: string) {
 }
 
 export async function generateStaticParams() {
-  const slugs = await sanityFetch<string[]>({
+  const slugs = await sanityFetchPublished<string[]>({
     query: authorSlugsQuery,
     tags: ['author'],
   })

@@ -28,4 +28,10 @@ export const client = createClient({
   token: process.env.SANITY_API_READ_TOKEN,
   useCdn: false,
   perspective: 'published',
+  // Off by default and switched on per request in draft mode only. Stega
+  // encodes field ids into the text as invisible characters so the
+  // Presentation tool can map a click on the page back to a field in the
+  // Studio; in published output those characters are corruption that would
+  // travel into search results and copied text.
+  stega: {studioUrl: '/studio', enabled: false},
 })

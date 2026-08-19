@@ -2,6 +2,7 @@
 
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
+import {presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 
 import {apiVersion, dataset, projectId} from './sanity/env'
@@ -36,6 +37,15 @@ export default defineConfig({
   },
   plugins: [
     structureTool({structure}),
+    // Side-by-side editing: the site on the right, the document on the left,
+    // updating as it is typed. `enable` points at the route that turns draft
+    // mode on; without draft mode the preview would show published content
+    // and silently be useless.
+    presentationTool({
+      previewUrl: {
+        previewMode: {enable: '/api/draft-mode/enable'},
+      },
+    }),
     // Vision is the GROQ playground. Useful while building, and harmless in
     // production because it can only read what the viewer's token allows.
     visionTool({defaultApiVersion: apiVersion}),
