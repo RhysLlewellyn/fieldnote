@@ -4,11 +4,48 @@ Things found during the finishing pass and deliberately not fixed, because they
 are P2/P3 — no user-visible defect, or a change of scope rather than a fix.
 P0s and P1s from that pass were fixed and are in the git history.
 
-> The `/impeccable audit` in the brief has not run: the plugin is not installed
-> in this environment (`pbakaus/impeccable`). Its P2/P3 findings still need
-> adding to this file once it has.
+> `/impeccable audit` v4.1.1 has now run against the source and against both
+> live pages at desktop and mobile viewports. Its P1 findings were fixed; what
+> it raised and this pass did not act on is recorded below.
 
 ---
+
+## Needs your decision — Impeccable vs the art direction
+
+**Kickers.** The detector bans the small tracked label above a heading, and its
+craft floor is unusually absolute about it: *"This one is a ban, not a default:
+no brief earns it back."* But `art-direction-reference.html` shows exactly that
+pattern — `<p class="kicker">Field report</p>` above the article title — so the
+element is in your own pinned design.
+
+Two instances: the topic name above an article headline, and "Current issue"
+above the issue title on the homepage. The second is mine and has no backing in
+the reference; the first does.
+
+I have not removed either. Deleting a documented element of your art direction
+on a third-party tool's say-so is your call, not mine, and this pass was scoped
+to fixes rather than redesign. Either drop the kickers and update
+`ART-DIRECTION.md`, or record the exception so the finding stops resurfacing.
+
+## Accepted deviations — the brief wins
+
+Impeccable's own precedence rule is that a pinned brief beats a
+saturated-pattern warning. These three are flagged on every scan and are all
+specified in `ART-DIRECTION.md`, so they stay:
+
+- **`overused-font: Fraunces`** — named as a face that AI-generated interfaces
+  converge on. It is the display face the art direction pins, with SOFT and
+  WONK settings the spec gives explicitly.
+- **`cream-palette` (#F7F4EE)** — flagged as the default "tasteful" AI surface.
+  It is `--color-paper`, straight from the spec's token table.
+- **`tight-leading` 1.02 and 1.18** — the rule wants 1.3 minimum and explains
+  itself in terms of body text. These are display sizes: 1.02 is the article h1
+  leading the spec sets by name, and 1.18 is a pull quote at 1.9rem. Body copy
+  runs at 1.7.
+
+Two more from the craft floor that the brief pins: monospace used for metadata
+rather than code, and 01/02/03 index numbering. Both are in the spec's
+signature details.
 
 ## P2 — worth doing before this goes in front of anyone
 
