@@ -18,6 +18,35 @@ type FetchOptions = {
 }
 
 /**
+ * Retry a read that failed for network reasons.
+ *
+ * A production build prerenders every page at once — fifteen workers, several
+ * queries each — and a burst like that reliably produces the occasional
+ * connect timeout on a domestic connection. The client's own `maxRetries`
+ * does not cover it: that timeout is thrown by the fetch layer underneath,
+ * before the client sees a response to retry.
+ *
+ * A failure here fails the whole build, so it is worth three attempts and a
+ * second of waiting to avoid pushing a red deploy over a dropped packet.
+ */
+async function withRetry<T>(read: () => Promise<T>): Promise<T> {
+  let lastError: unknown
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await read()
+    } catch (error) {
+      lastError = error
+      // 200ms, then 600ms. Long enough for a transient blip, short enough
+      // that a genuinely broken connection still fails the build quickly.
+      await new Promise((resolve) => setTimeout(resolve, 200 * 3 ** attempt))
+    }
+  }
+
+  throw lastError
+}
+
+/**
  * Every read a page makes goes through here.
  *
  * Two modes. For a reader, responses are cached indefinitely and tagged, and
@@ -38,12 +67,14 @@ export async function sanityFetch<T>(options: FetchOptions): Promise<T> {
   if (!isDraft) return sanityFetchPublished<T>(options)
 
   const {query, params = {}} = options
-  return client.fetch<T>(query, params, {
-    perspective: 'drafts',
-    useCdn: false,
-    stega: true,
-    cache: 'no-store',
-  })
+  return withRetry(() =>
+    client.fetch<T>(query, params, {
+      perspective: 'drafts',
+      useCdn: false,
+      stega: true,
+      cache: 'no-store',
+    }),
+  )
 }
 
 /**
@@ -59,7 +90,9 @@ export async function sanityFetchPublished<T>({
   params = {},
   tags,
 }: FetchOptions): Promise<T> {
-  return client.fetch<T>(query, params, {
-    next: {revalidate: false, tags},
-  })
+  return withRetry(() =>
+    client.fetch<T>(query, params, {
+      next: {revalidate: false, tags},
+    }),
+  )
 }
