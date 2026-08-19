@@ -31,8 +31,10 @@ export async function POST(request: NextRequest) {
 
   const {body, isValidSignature} = await parseBody<WebhookPayload>(request, secret)
 
-  if (isValidSignature === false) {
-    return new NextResponse('Invalid signature', {status: 401})
+  // Not `=== false`: a request with no signature header at all comes back as
+  // null, and only `true` means the payload was signed with our secret.
+  if (isValidSignature !== true) {
+    return new NextResponse('Missing or invalid signature', {status: 401})
   }
 
   if (!body?._type) {
