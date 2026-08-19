@@ -21,8 +21,16 @@
  *   is the paper showing through.
  */
 
-const OCHRE = '#B8642A'
-const MOSS = '#3D5142'
+/**
+ * The two inks, taken from the theme rather than repeated as hex.
+ *
+ * Inline SVG resolves CSS custom properties, so the artwork and the interface
+ * cannot drift apart — which they briefly did when ochre was darkened for
+ * contrast and these constants were not.
+ */
+const OCHRE = 'var(--color-ochre)'
+const MOSS = 'var(--color-moss)'
+const PAPER_2 = 'var(--color-paper-2)'
 
 export type RisoFamily = 'ridgeline' | 'ellipses' | 'contour'
 
@@ -140,17 +148,22 @@ export function RisoArt({
     >
       <defs>
         <filter id={grainId}>
+          {/* One octave, not three. Each octave is another pass of noise
+              generation over every pixel of a full-width image, and at 7%
+              opacity the difference between one and three is invisible while
+              the cost is not — Lighthouse simulates a 4x CPU slowdown, which
+              is where a filter like this actually hurts. */}
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.9"
-            numOctaves={3}
+            numOctaves={1}
             stitchTiles="stitch"
           />
           <feColorMatrix type="saturate" values="0" />
         </filter>
       </defs>
 
-      <rect width={width} height={height} fill="#EFEAE0" />
+      <rect width={width} height={height} fill={PAPER_2} />
 
       {chosen === 'ridgeline' &&
         (() => {

@@ -31,6 +31,10 @@ const meta = IBM_Plex_Mono({
   subsets: ['latin'],
   display: 'swap',
   weight: ['400'],
+  // Not preloaded. It only ever sets metadata — kickers, bylines, captions —
+  // and is never the largest element on a page, so it has no business
+  // competing with the two faces that are while the page is still painting.
+  preload: false,
 })
 
 /**
