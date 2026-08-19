@@ -31,10 +31,11 @@ const meta = IBM_Plex_Mono({
   subsets: ['latin'],
   display: 'swap',
   weight: ['400'],
-  // Not preloaded. It only ever sets metadata — kickers, bylines, captions —
-  // and is never the largest element on a page, so it has no business
-  // competing with the two faces that are while the page is still painting.
-  preload: false,
+  // Preloaded, despite only ever setting metadata. Deferring it saved 10KB on
+  // the critical path and cost a 0.24 layout shift: the navigation is set in
+  // this face, it is materially wider than the Arial-based fallback, and
+  // arriving late meant the header reflowed after the page had painted and
+  // pushed everything below it down.
 })
 
 /**
