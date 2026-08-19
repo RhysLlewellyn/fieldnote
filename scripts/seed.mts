@@ -304,13 +304,15 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       ],
       footerText:
         'Fieldnote is published four times a year. Printed in Bristol.',
+      // example.com and nothing else. It is reserved by IANA precisely for
+      // this and can never belong to anyone; instagram.com/<anything> and
+      // mastodon.social/@<anything> are live namespaces, so a made-up handle
+      // there is either a stranger's account or a 404 — and a footer that
+      // links a stranger's Instagram from a masthead is worse than a footer
+      // with no social links at all.
       socialLinks: [
-        {_key: key(), label: 'Instagram', url: 'https://instagram.com/fieldnote'},
-        {
-          _key: key(),
-          label: 'Mastodon',
-          url: 'https://mastodon.social/@fieldnote',
-        },
+        {_key: key(), label: 'Instagram', url: 'https://example.com/instagram'},
+        {_key: key(), label: 'Mastodon', url: 'https://example.com/mastodon'},
       ],
     },
 
