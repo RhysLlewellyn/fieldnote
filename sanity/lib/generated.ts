@@ -581,13 +581,14 @@ export type ArticlesQueryResult = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: articleBySlugQuery
-// Query: *[_type == "article" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    standfirst,    publishedAt,    body[]{  ...,  _type == "captionedImage" => {  ...,  asset->{    _id,    url,    metadata {lqip, dimensions {width, height, aspectRatio}}  }},  _type == "imageGallery" => {    ...,    images[]{  ...,  asset->{    _id,    url,    metadata {lqip, dimensions {width, height, aspectRatio}}  }}  }},    author->{      name,      "slug": slug.current,      role,      bio    },    issue->{number, title, "slug": slug.current},    topics[]->{_id, title, "slug": slug.current},    seo {..., ogImage {  ...,  asset->{    _id,    url,    metadata {lqip, dimensions {width, height, aspectRatio}}  }}}  }
+// Query: *[_type == "article" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    standfirst,    publishedAt,    "readingTime": math::max([1, round(length(pt::text(body)) / 5 / 220)]),    body[]{  ...,  _type == "captionedImage" => {  ...,  asset->{    _id,    url,    metadata {lqip, dimensions {width, height, aspectRatio}}  }},  _type == "imageGallery" => {    ...,    images[]{  ...,  asset->{    _id,    url,    metadata {lqip, dimensions {width, height, aspectRatio}}  }}  }},    author->{      name,      "slug": slug.current,      role,      bio    },    issue->{number, title, "slug": slug.current},    topics[]->{_id, title, "slug": slug.current},    seo {..., ogImage {  ...,  asset->{    _id,    url,    metadata {lqip, dimensions {width, height, aspectRatio}}  }}}  }
 export type ArticleBySlugQueryResult = {
   _id: string;
   title: string;
   slug: string;
   standfirst: string;
   publishedAt: string;
+  readingTime: number | 1;
   body: Array<
     | {
         children?: Array<{

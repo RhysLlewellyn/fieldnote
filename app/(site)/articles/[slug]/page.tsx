@@ -14,7 +14,6 @@ import {ArticleIndex} from '@/app/components/ArticleIndex'
 import {Byline} from '@/app/components/Byline'
 import {PortableText, SimpleText} from '@/app/components/PortableText'
 import {RisoArt} from '@/app/components/RisoArt'
-import {readingTime} from '@/app/lib/format'
 import {buildMetadata} from '@/app/lib/metadata'
 
 type Props = {params: Promise<{slug: string}>}
@@ -90,7 +89,7 @@ export default async function ArticlePage({params}: Props) {
           author={article.author}
           publishedAt={article.publishedAt}
           issue={article.issue}
-          readingTime={readingTime(article.body)}
+          readingTime={article.readingTime}
         />
       </header>
 

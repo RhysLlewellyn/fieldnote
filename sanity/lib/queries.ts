@@ -111,6 +111,7 @@ export const articleBySlugQuery = defineQuery(`
     "slug": slug.current,
     standfirst,
     publishedAt,
+    "readingTime": math::max([1, round(length(pt::text(body)) / 5 / 220)]),
     body[]{${portableTextFields}},
     author->{
       name,
