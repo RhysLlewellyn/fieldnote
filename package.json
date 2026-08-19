@@ -35,5 +35,11 @@
     "js-yaml": "^4.1.0",
     "smol-toml": "^1.6.1",
     "uuid": "^11.1.1"
-  }
+  },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ]
 }
