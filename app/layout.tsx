@@ -62,12 +62,22 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en-GB">
-      <body
-        className={`${display.variable} ${body.variable} ${meta.variable} antialiased`}
-      >
-        {children}
-      </body>
+    /**
+     * The font variables go on <html>, not <body>.
+     *
+     * `@theme` declares --font-display as `var(--font-fraunces), Georgia,
+     * serif` on :root. A custom property is substituted where it is declared,
+     * not where it is used, so with --font-fraunces defined on <body> the
+     * reference resolves against :root, finds nothing, and --font-display
+     * computes to an invalid value that every element then inherits. The
+     * result is the whole site quietly falling back to Tailwind's default
+     * sans stack while the CSS all looks correct.
+     */
+    <html
+      lang="en-GB"
+      className={`${display.variable} ${body.variable} ${meta.variable}`}
+    >
+      <body className="antialiased">{children}</body>
     </html>
   )
 }
