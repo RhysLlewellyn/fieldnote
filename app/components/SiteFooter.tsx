@@ -14,7 +14,7 @@ export async function SiteFooter() {
               <li key={link.url}>
                 <a
                   href={link.url}
-                  className="hover:text-ochre"
+                  className="block py-1 hover:text-ochre"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

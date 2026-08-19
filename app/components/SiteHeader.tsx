@@ -25,7 +25,11 @@ export async function SiteHeader() {
             <ul className="flex flex-wrap gap-x-7 gap-y-2 font-meta text-[0.7rem] tracking-[0.14em] uppercase">
               {settings.navigation.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="hover:text-ochre">
+                  {/* py-1 takes the target from ~18px to ~26px tall. At
+                      0.7rem the text alone is under the 24px WCAG 2.2 asks
+                      for, and these are the links a phone user reaches for
+                      most. */}
+                  <Link href={item.href} className="block py-1 hover:text-ochre">
                     {item.label}
                   </Link>
                 </li>

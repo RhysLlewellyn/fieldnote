@@ -54,9 +54,17 @@ export default async function HomePage() {
           <h2 className="sr-only">Latest</h2>
 
           <div className="grid gap-10 md:grid-cols-[1.1fr_1fr] md:gap-14">
+            {/* The artwork is decorative and aria-hidden, which left this
+                link with no accessible name and put a nameless stop in the
+                tab order. Hidden from assistive technology and taken out of
+                the tab order entirely: the headline below links to the same
+                article, so a keyboard or screen-reader user gets one link
+                per destination rather than two, one of them unnamed. */}
             <Link
               href={`/articles/${featured.slug}`}
               className="block aspect-[8/5] overflow-hidden md:aspect-[4/5]"
+              aria-hidden="true"
+              tabIndex={-1}
             >
               <RisoArt seed={featured.slug} width={640} height={800} />
             </Link>

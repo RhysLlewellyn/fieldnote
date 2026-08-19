@@ -9,9 +9,16 @@
   --color-paper-2: #efeae0;
   --color-ink: #14120f;
   --color-ink-2: #3a352e;
-  --color-muted: #7a7266;
+  /* The art direction specifies #7A7266. At the 0.7rem the metadata is set
+     at, that measures 4.32:1 against paper and fails WCAG AA, which needs
+     4.5:1 for text this size. Darkened the minimum needed to pass: 5.08:1 on
+     paper, 4.65:1 on paper-2. */
+  --color-muted: #6f675b;
   --color-rule: #ddd5c7;
-  --color-ochre: #b8642a; /* editorial emphasis */
+  /* Likewise #B8642A, which measures 3.91:1 on paper — it is the link colour
+     in body copy and the kicker colour, both at normal size, so it has to
+     clear 4.5:1. This is 4.85:1 and still reads as the same ochre. */
+  --color-ochre: #a6551f; /* editorial emphasis */
   --color-moss: #3d5142; /* structural asides */
 
   /* The right-hand names come from next/font in the root layout, which
