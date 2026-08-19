@@ -1,29 +1,79 @@
 @import "tailwindcss";
 
+/**
+ * Tokens. Everything visual comes from here — no component invents a colour
+ * or a face of its own.
+ */
+@theme {
+  --color-paper: #f7f4ee;
+  --color-paper-2: #efeae0;
+  --color-ink: #14120f;
+  --color-ink-2: #3a352e;
+  --color-muted: #7a7266;
+  --color-rule: #ddd5c7;
+  --color-ochre: #b8642a; /* editorial emphasis */
+  --color-moss: #3d5142; /* structural asides */
+
+  /* The right-hand names come from next/font in the root layout, which
+     self-hosts the files rather than calling Google at request time. */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-newsreader), Georgia, serif;
+  --font-meta: var(--font-plex-mono), ui-monospace, monospace;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  /* Punctuation hangs into the margin rather than ragging the measure. One of
+     the details that separates typeset from merely styled. */
+  hanging-punctuation: first last;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  /* Geist is loaded by next/font in the root layout and exposed as
-     --font-geist-sans. The starter hard-coded Arial here, which quietly
-     overrode it on every page. */
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  /* Newsreader is an optical-size variable face; without this it is set at
+     whatever size the browser guesses. */
+  font-optical-sizing: auto;
+}
+
+/**
+ * Fraunces has SOFT and WONK axes that are the whole reason to use it. Left at
+ * their defaults it reads as a slightly-off Georgia.
+ */
+.font-display {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 20, "WONK" 1;
+}
+
+a {
+  color: inherit;
+  transition: color 150ms ease;
+}
+
+::selection {
+  background: var(--color-ochre);
+  color: var(--color-paper);
+}
+
+/**
+ * Nothing on this site animates on scroll, and the only transition is the
+ * 150ms on links. This is still here because it is the kind of thing the
+ * audience checks, and because a future component should inherit the rule
+ * rather than have to remember it.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
