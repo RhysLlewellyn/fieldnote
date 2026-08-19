@@ -1,6 +1,6 @@
 # Fieldnote — art direction
 
-Visual reference: `fieldnote-art-direction.html`. Open it in a browser; the build should look
+Visual reference: `art-direction-reference.html`. Open it in a browser; the build should look
 like that.
 
 **Supersedes** the imagery instruction in `DEMO-BRIEFS.md`. That said "openly-licensed
