@@ -28,21 +28,6 @@ export const author = defineType({
         'How they are described under their name — “Contributing editor”, “Photographer”.',
     }),
     defineField({
-      name: 'portrait',
-      title: 'Portrait',
-      type: 'image',
-      options: {hotspot: true},
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alternative text',
-          type: 'string',
-          description: 'Usually just the person’s name.',
-          validation: (rule) => rule.required().error('Alt text is required'),
-        }),
-      ],
-    }),
-    defineField({
       name: 'bio',
       title: 'Biography',
       type: 'simpleText',
@@ -78,6 +63,6 @@ export const author = defineType({
     }),
   ],
   preview: {
-    select: {title: 'name', subtitle: 'role', media: 'portrait'},
+    select: {title: 'name', subtitle: 'role'},
   },
 })

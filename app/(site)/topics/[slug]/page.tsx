@@ -5,7 +5,7 @@ import {sanityFetch, sanityFetchPublished} from '@/sanity/lib/fetch'
 import {topicBySlugQuery, topicSlugsQuery} from '@/sanity/lib/queries'
 import type {Topic} from '@/sanity/lib/types'
 
-import {ArticleCard} from '@/app/components/ArticleCard'
+import {ArticleIndex} from '@/app/components/ArticleIndex'
 import {buildMetadata} from '@/app/lib/metadata'
 
 type Props = {params: Promise<{slug: string}>}
@@ -40,32 +40,28 @@ export default async function TopicPage({params}: Props) {
   if (!topic) notFound()
 
   return (
-    <div className="mx-auto max-w-5xl px-5 py-10 sm:py-16">
-      <header className="max-w-[45rem]">
-        <p className="text-sm tracking-wide uppercase text-black/55 dark:text-white/55">
+    <div className="mx-auto max-w-[1100px] px-8 py-14">
+      <header className="max-w-[34rem]">
+        <p className="font-meta text-[0.7rem] tracking-[0.14em] text-ochre uppercase">
           Topic
         </p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="font-display mt-3 text-[clamp(2.25rem,5vw,3.25rem)] leading-[1.02] font-light tracking-[-0.028em]">
           {topic.title}
         </h1>
         {topic.description ? (
-          <p className="mt-3 text-lg text-black/70 dark:text-white/70">
+          <p className="mt-4 text-[1.3rem] leading-[1.5] italic">
             {topic.description}
           </p>
         ) : null}
       </header>
 
-      {topic.articles.length === 0 ? (
-        <p className="mt-10 text-black/60 dark:text-white/60">
-          Nothing filed under this topic yet.
-        </p>
-      ) : (
-        <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {topic.articles.map((article) => (
-            <ArticleCard key={article._id} article={article} />
-          ))}
-        </div>
-      )}
+      <div className="mt-12">
+        {topic.articles.length === 0 ? (
+          <p className="text-muted">Nothing filed under this topic yet.</p>
+        ) : (
+          <ArticleIndex articles={topic.articles} />
+        )}
+      </div>
     </div>
   )
 }

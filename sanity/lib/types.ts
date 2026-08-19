@@ -104,7 +104,8 @@ export type ArticleCard = {
   standfirst: string
   publishedAt: string
   featured?: boolean
-  coverImage: SanityImage
+  /** Minutes, computed in GROQ from the body's plain text. */
+  readingTime: number
   author: AuthorRef | null
   issue: IssueRef | null
   topics: TopicRef[] | null
@@ -116,13 +117,11 @@ export type Article = {
   slug: string
   standfirst: string
   publishedAt: string
-  coverImage: SanityImage
   body: BodyBlock[] | null
   author: {
     name: string
     slug: string
     role?: string
-    portrait?: SanityImage
     bio?: PortableTextBlock[]
   } | null
   issue: IssueRef | null
@@ -136,7 +135,6 @@ export type IssueCard = {
   title: string
   slug: string
   publishedAt: string
-  coverImage: SanityImage
   articleCount: number
 }
 
@@ -147,7 +145,6 @@ export type Issue = {
   slug: string
   publishedAt: string
   colophon?: string
-  coverImage: SanityImage
   introduction: BodyBlock[] | null
   articles: ArticleCard[]
 }
@@ -167,7 +164,6 @@ export type Author = {
   name: string
   slug: string
   role?: string
-  portrait?: SanityImage
   bio?: PortableTextBlock[]
   links: {label: string; url: string}[] | null
   articles: ArticleCard[]
@@ -195,3 +191,11 @@ export type HomePage = {
   recent: ArticleCard[]
   latestIssue: Omit<IssueCard, 'articleCount'> | null
 }
+
+/**
+ * Imagery is generated from a seed rather than uploaded, so no document type
+ * carries a cover image any more. `SanityImage` survives for the two places
+ * a real file is still the right answer: images an editor places inside an
+ * article body, and the social share image, which has to be a raster URL a
+ * third-party crawler can fetch.
+ */

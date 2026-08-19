@@ -4,17 +4,17 @@ export async function SiteFooter() {
   const settings = await getSiteSettings()
 
   return (
-    <footer className="mt-20 border-t border-black/10 dark:border-white/15">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-baseline justify-between gap-x-8 gap-y-3 px-5 py-8 text-sm text-black/60 dark:text-white/60">
+    <footer className="mt-24 border-t border-rule">
+      <div className="mx-auto flex max-w-[1100px] flex-wrap items-baseline justify-between gap-x-10 gap-y-3 px-8 py-8 font-meta text-[0.7rem] tracking-[0.14em] text-muted uppercase">
         <p>{settings?.footerText ?? null}</p>
 
         {settings?.socialLinks?.length ? (
-          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          <ul className="flex flex-wrap gap-x-7 gap-y-2">
             {settings.socialLinks.map((link) => (
               <li key={link.url}>
                 <a
                   href={link.url}
-                  className="underline-offset-4 hover:underline"
+                  className="hover:text-ochre"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

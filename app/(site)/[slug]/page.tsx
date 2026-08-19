@@ -48,9 +48,9 @@ export default async function ContentPage({params}: Props) {
   if (!page) notFound()
 
   return (
-    <div className="mx-auto max-w-5xl px-5 py-10 sm:py-16">
-      <div className="mx-auto max-w-[45rem]">
-        <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+    <div className="mx-auto max-w-[1100px] px-8 py-14">
+      <div className="mx-auto max-w-[34rem]">
+        <h1 className="font-display mb-10 text-[clamp(2.25rem,5vw,3.25rem)] leading-[1.02] font-light tracking-[-0.028em] text-balance">
           {page.title}
         </h1>
         <PortableText value={page.body} />

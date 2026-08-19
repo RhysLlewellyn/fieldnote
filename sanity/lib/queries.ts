@@ -40,7 +40,13 @@ const portableTextFields = /* groq */ `
   }
 `
 
-/** What a list needs to show an article: no body, no SEO. */
+/**
+ * What a list needs to show an article: no body, no SEO.
+ *
+ * Reading time is computed here rather than by shipping every article's body
+ * to the client and counting words there. `pt::text` flattens Portable Text to
+ * a string inside the query; five characters is the usual stand-in for a word.
+ */
 const articleCardFields = /* groq */ `
   _id,
   title,
@@ -48,7 +54,7 @@ const articleCardFields = /* groq */ `
   standfirst,
   publishedAt,
   featured,
-  coverImage {${imageFields}},
+  "readingTime": math::max([1, round(length(pt::text(body)) / 5 / 220)]),
   author->{name, "slug": slug.current},
   issue->{number, title, "slug": slug.current},
   topics[]->{_id, title, "slug": slug.current}
@@ -84,8 +90,7 @@ export const homeQuery = defineQuery(`{
     number,
     title,
     "slug": slug.current,
-    publishedAt,
-    coverImage {${imageFields}}
+    publishedAt
   }
 }`)
 
@@ -106,13 +111,11 @@ export const articleBySlugQuery = defineQuery(`
     "slug": slug.current,
     standfirst,
     publishedAt,
-    coverImage {${imageFields}},
     body[]{${portableTextFields}},
     author->{
       name,
       "slug": slug.current,
       role,
-      portrait {${imageFields}},
       bio
     },
     issue->{number, title, "slug": slug.current},
@@ -149,7 +152,6 @@ export const issuesQuery = defineQuery(`
     title,
     "slug": slug.current,
     publishedAt,
-    coverImage {${imageFields}},
     "articleCount": count(*[_type == "article" && issue._ref == ^._id])
   }
 `)
@@ -162,7 +164,6 @@ export const issueBySlugQuery = defineQuery(`
     "slug": slug.current,
     publishedAt,
     colophon,
-    coverImage {${imageFields}},
     introduction[]{${portableTextFields}},
     "articles": *[_type == "article" && issue._ref == ^._id]
       | order(publishedAt asc){${articleCardFields}}
@@ -208,7 +209,6 @@ export const authorBySlugQuery = defineQuery(`
     name,
     "slug": slug.current,
     role,
-    portrait {${imageFields}},
     bio,
     links[]{label, url},
     "articles": *[_type == "article" && author._ref == ^._id]

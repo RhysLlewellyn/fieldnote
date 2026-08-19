@@ -7,7 +7,7 @@ import type {TopicWithCount} from '@/sanity/lib/types'
 
 export const metadata: Metadata = {
   title: 'Topics',
-  description: 'Every topic Fieldnote files articles under.',
+  description: 'Every topic Fieldnote files work under.',
 }
 
 export default async function TopicsPage() {
@@ -17,35 +17,43 @@ export default async function TopicsPage() {
   })
 
   return (
-    <div className="mx-auto max-w-5xl px-5 py-10 sm:py-16">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Topics</h1>
+    <div className="mx-auto max-w-[1100px] px-8 py-14">
+      <h1 className="font-display text-[clamp(2.25rem,5vw,3.25rem)] leading-[1.02] font-light tracking-[-0.028em]">
+        Topics
+      </h1>
 
       {topics.length === 0 ? (
-        <p className="mt-8 text-black/60 dark:text-white/60">No topics yet.</p>
+        <p className="mt-8 text-muted">No topics yet.</p>
       ) : (
-        <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
-          {topics.map((topic) => (
-            <li key={topic._id} className="border-t border-black/10 pt-4 dark:border-white/15">
-              <h2 className="text-lg font-semibold tracking-tight">
-                <Link
-                  href={`/topics/${topic.slug}`}
-                  className="underline-offset-4 hover:underline"
-                >
-                  {topic.title}
-                </Link>
-              </h2>
-              {topic.description ? (
-                <p className="mt-1 text-sm text-black/70 dark:text-white/70">
-                  {topic.description}
-                </p>
-              ) : null}
-              <p className="mt-1 text-sm text-black/55 dark:text-white/55">
-                {topic.articleCount}{' '}
-                {topic.articleCount === 1 ? 'article' : 'articles'}
-              </p>
+        <ol className="mt-10 border-t border-rule">
+          {topics.map((topic, i) => (
+            <li key={topic._id} className="border-b border-rule">
+              <Link
+                href={`/topics/${topic.slug}`}
+                className="group flex items-baseline gap-5 py-6 sm:gap-8"
+              >
+                <span className="font-meta text-[0.7rem] tracking-[0.14em] text-muted tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+
+                <span className="flex-1">
+                  <span className="font-display block text-[1.6rem] leading-[1.15] tracking-[-0.02em] group-hover:text-ochre">
+                    {topic.title}
+                  </span>
+                  {topic.description ? (
+                    <span className="mt-1.5 block max-w-[34rem] text-[1.02rem] leading-[1.6] text-ink-2">
+                      {topic.description}
+                    </span>
+                  ) : null}
+                </span>
+
+                <span className="font-meta text-[0.7rem] tracking-[0.14em] text-muted whitespace-nowrap">
+                  {topic.articleCount}
+                </span>
+              </Link>
             </li>
           ))}
-        </ul>
+        </ol>
       )}
     </div>
   )

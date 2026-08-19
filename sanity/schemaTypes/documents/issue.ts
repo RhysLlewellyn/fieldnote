@@ -37,26 +37,6 @@ export const issue = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'coverImage',
-      title: 'Cover',
-      type: 'image',
-      options: {hotspot: true},
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alternative text',
-          type: 'string',
-          validation: (rule) => rule.required().error('Alt text is required'),
-        }),
-        defineField({
-          name: 'credit',
-          title: 'Credit',
-          type: 'string',
-        }),
-      ],
-      validation: (rule) => rule.required().error('Every issue needs a cover'),
-    }),
-    defineField({
       name: 'publishedAt',
       title: 'Publication date',
       type: 'datetime',
@@ -86,11 +66,10 @@ export const issue = defineType({
     },
   ],
   preview: {
-    select: {number: 'number', title: 'title', media: 'coverImage'},
-    prepare: ({number, title, media}) => ({
+    select: {number: 'number', title: 'title'},
+    prepare: ({number, title}) => ({
       title: 'Issue ' + (number ?? '—'),
       subtitle: title,
-      media,
     }),
   },
 })

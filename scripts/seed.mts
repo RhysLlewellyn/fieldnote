@@ -8,10 +8,15 @@
  * making copies. It only ever touches the ids listed below, so anything
  * written in the Studio is left alone.
  *
- * The content is deliberately awkward in places — a headline near the length
- * limit, an article with no issue and no topics, an author with no portrait.
- * Seed data where every field is filled in makes every layout look fine, and
- * the gaps are where layouts actually break.
+ * The content is deliberately uneven, which is the point. A real magazine is
+ * not twelve pieces of the same length: there are long reports, short notes
+ * and single-paragraph fragments, and the index holds an odd number of them.
+ * Evenness is what makes a demo look generated.
+ *
+ * It is awkward in places for the same reason — a headline near the length
+ * limit, an article belonging to no issue and no topic, an author with no
+ * links, a topic with no description. Seed data where every field is filled in
+ * makes every layout look fine, and the gaps are where layouts break.
  */
 import {createClient} from '@sanity/client'
 import sharp from 'sharp'
@@ -156,92 +161,46 @@ function hash(text: string, salt: number): number {
 }
 
 function svg({name, width, height}: ImageSpec): string {
-  const baseHue = Math.round(hash(name, 1) * 360)
-  const secondHue = (baseHue + 40 + Math.round(hash(name, 2) * 80)) % 360
+  // Fieldnote's imagery is two-colour riso on paper. These are the seeded body
+  // images; the artwork on covers and article heroes is generated at render
+  // time by app/components/RisoArt.tsx and is not stored anywhere.
+  const OCHRE = '#B8642A'
+  const MOSS = '#3D5142'
 
-  const circles = Array.from({length: 4}, (_, i) => {
-    const cx = Math.round(hash(name, 10 + i) * width)
-    const cy = Math.round(hash(name, 20 + i) * height)
-    const r = Math.round(
-      (0.12 + hash(name, 30 + i) * 0.22) * Math.min(width, height),
-    )
-    const hue = (baseHue + i * 35) % 360
-    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="hsl(${hue} 70% 60%)" opacity="0.35"/>`
-  }).join('')
+  // Misregistration: the second colour lays down a few pixels off, the way it
+  // does when paper shifts between passes.
+  const dx = 2 + hash(name, 3) * 2
+  const dy = 2 + hash(name, 4) * 2
+
+  const shapes = (fill: string, salt: number) =>
+    Array.from({length: 4}, (_, i) => {
+      const cx = Math.round(hash(name, salt + i) * width)
+      const cy = Math.round(hash(name, salt + 10 + i) * height)
+      const rx = Math.round((0.14 + hash(name, salt + 20 + i) * 0.24) * width)
+      const ry = Math.round((0.12 + hash(name, salt + 30 + i) * 0.22) * height)
+      // Ink density varies rather than sitting at one flat value.
+      const opacity = (0.55 + hash(name, salt + 40 + i) * 0.3).toFixed(3)
+      return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" opacity="${opacity}" style="mix-blend-mode:multiply"/>`
+    }).join('')
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-    <defs>
-      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="hsl(${baseHue} 55% 32%)"/>
-        <stop offset="100%" stop-color="hsl(${secondHue} 60% 62%)"/>
-      </linearGradient>
-    </defs>
-    <rect width="${width}" height="${height}" fill="url(#g)"/>
-    ${circles}
+    <rect width="${width}" height="${height}" fill="#EFEAE0"/>
+    <g>${shapes(MOSS, 100)}</g>
+    <g transform="translate(${dx.toFixed(1)} ${dy.toFixed(1)})">${shapes(OCHRE, 200)}</g>
   </svg>`
 }
 
 const IMAGES: ImageSpec[] = [
-  {
-    name: 'cover-tideline',
-    width: 2400,
-    height: 1600,
-    alt: 'Wet sand at low tide, the water line barely visible against a pale sky',
-    credit: 'Tomás Iriarte',
-  },
-  {
-    name: 'cover-kiln',
-    width: 2400,
-    height: 1600,
-    alt: 'A brick bottle kiln standing against an overcast sky',
-    credit: 'Tomás Iriarte',
-  },
-  {
-    name: 'cover-transhumance',
-    width: 2400,
-    height: 1600,
-    alt: 'A flock crossing a high pass in late afternoon light',
-  },
-  {
-    name: 'cover-signal',
-    width: 2400,
-    height: 1600,
-    alt: 'A radio mast on a hillside, seen through rain',
-    credit: 'Wren Okonkwo',
-  },
-  {
-    name: 'cover-ledger',
-    width: 2400,
-    height: 1600,
-    alt: 'An open ledger, its columns filled in fading ink',
-  },
-  {
-    name: 'cover-harbour',
-    width: 2400,
-    height: 1600,
-    alt: 'Harbour lights reflected on black water',
-    credit: 'Tomás Iriarte',
-  },
-  {
-    name: 'issue-one',
-    width: 1600,
-    height: 2000,
-    alt: 'Cover of issue one, The Long Way Round',
-  },
-  {
-    name: 'issue-two',
-    width: 1600,
-    height: 2000,
-    alt: 'Cover of issue two, Ground Truth',
-  },
-  {name: 'portrait-delacroix', width: 900, height: 900, alt: 'Mara Delacroix'},
-  {name: 'portrait-iriarte', width: 900, height: 900, alt: 'Tomás Iriarte'},
+  // Only the images an editor would genuinely place: documentary material
+  // inside an article body, and the social share image, which has to be a
+  // raster file a third-party crawler can fetch. Covers and heroes are drawn
+  // at render time and are not files at all.
   {
     name: 'body-saltmarsh',
     width: 2000,
     height: 1333,
     alt: 'Saltmarsh channels seen from above at low water',
-    credit: 'Tomás Iriarte',
+    credit: 'Riso — generated',
   },
   {
     name: 'body-kiln-interior',
@@ -362,7 +321,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       name: 'Mara Delacroix',
       slug: {_type: 'slug', current: 'mara-delacroix'},
       role: 'Editor',
-      portrait: image('portrait-delacroix'),
       bio: [
         p(
           'Mara founded Fieldnote in 2019 after a decade reporting on coastal planning. She lives on the Severn estuary and is still, by her own account, learning to read a tide table.',
@@ -376,7 +334,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       name: 'Tomás Iriarte',
       slug: {_type: 'slug', current: 'tomas-iriarte'},
       role: 'Contributing photographer',
-      portrait: image('portrait-iriarte'),
       bio: [
         p(
           'Tomás photographs working landscapes. His long project on the last industrial potteries of the Midlands ran across issues one and two.',
@@ -385,7 +342,7 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       links: null,
     },
     {
-      // No portrait and no links — the author page has to survive both.
+      // No links — the author page has to survive their absence.
       _id: 'author-okonkwo',
       _type: 'author',
       name: 'Wren Okonkwo',
@@ -437,7 +394,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       number: 1,
       title: 'The Long Way Round',
       slug: {_type: 'slug', current: '1'},
-      coverImage: image('issue-one'),
       publishedAt: '2026-03-14T09:00:00.000Z',
       introduction: [
         p(
@@ -456,7 +412,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       number: 2,
       title: 'Ground Truth',
       slug: {_type: 'slug', current: '2'},
-      coverImage: image('issue-two'),
       publishedAt: '2026-06-20T09:00:00.000Z',
       introduction: [
         p(
@@ -475,7 +430,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       slug: {_type: 'slug', current: 'tideline-moves-twice-a-day'},
       standfirst:
         'Ordnance Survey draws the coast as a single line. On the Severn, that line is a fiction the tide corrects twice a day — and the people who live there keep their own maps.',
-      coverImage: image('cover-tideline'),
       publishedAt: '2026-03-14T09:00:00.000Z',
       featured: true,
       author: ref('author-delacroix'),
@@ -483,14 +437,17 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       topics: [keyedRef('topic-landscape'), keyedRef('topic-archive')],
       body: [
         p(
-          'The mean high water mark is a legal object as much as a geographical one. It decides who owns what, who may build, and who is liable when the water arrives anyway. It is drawn as a line because a line is what a map can hold.',
+          'The mean high water mark is a legal object as much as a geographical one. It decides who owns what, who may build, and who carries the loss when the water arrives anyway. It is drawn as a line because a line is what a map can hold.',
         ),
         p(
-          'On the Severn the difference between that line and the water is measured in hundreds of metres. The second highest tidal range in the world moves the edge of the land twice a day, and has been doing so for longer than anyone has been drawing it.',
+          'On the Severn the difference between that line and the water is measured in hundreds of metres. The range at Avonmouth runs to about fourteen metres on the biggest spring tides — the second largest in the world — and it moves the edge of the land twice a day, and has been doing so for a great deal longer than anyone has been drawing it.',
         ),
         h2('What the survey records'),
         p(
-          'The first detailed survey of this stretch was made in 1873. It is [held at the county archive](https://example.com/archive), it is beautiful, and where it is wrong it is confidently wrong.',
+          'The first detailed survey of this stretch was made in 1873 by a man named Pritchard, working from a rowing boat with a lead line and a theodolite set up on the sea wall. It is [held at the county archive](https://example.com/archive) in six sheets. It is beautiful. Where it is wrong, it is confidently wrong.',
+        ),
+        p(
+          'Pritchard drew the saltmarsh edge as a firm line and the channels behind it as fixed. Both were reasonable things to believe in 1873 and neither has been true since. The main channel at Sheperdine has moved roughly 300 metres east in the intervening century and a half, and moved back about half that distance in the four years after the 2013 surge.',
         ),
         figure(
           'body-saltmarsh',
@@ -502,22 +459,34 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
         ),
         h2('What the tide records'),
         p(
-          'The people who work this coast keep their own version. It is not written down in any form a surveyor would recognise, and it is more accurate:',
+          'The people who work this coast keep their own version. It is not written down in any form a surveyor would recognise, and within its scope it is considerably more accurate. Ask a fisherman where the channel is and you will get an answer referenced to a pylon, a gate and a state of the tide, which is three pieces of information a grid reference does not carry.',
         ),
+        p('What that knowledge covers, roughly:'),
         ...bullets([
-          'Where the channel has moved since last winter',
-          'Which paths are passable at which state of the tide',
-          'Which fields flooded in 2019 and will flood again',
-        ]),
-        aside('On tide tables', [
-          'Predicted heights assume average atmospheric pressure and no wind. A deep low and a southwesterly can add half a metre to a prediction.',
-          'The tables are right about the timing and only approximately right about the height, which is the opposite of how most people read them.',
+          'Where the channel has moved since last winter, and which way it is still going',
+          'Which paths are passable at which state of the tide, and how long the window is',
+          'Which fields flooded in 2013 and in 2019, and therefore which will flood again',
+          'Where the old sea wall runs under the marsh, and where it has gone',
         ]),
         p(
-          'None of this makes the official line useless. It makes it one claim among several, and the only one with legal force — which is precisely the problem.',
+          'None of it is legally admissible. All of it is what people actually use.',
+        ),
+        aside('On tide tables', [
+          'Predicted heights assume average atmospheric pressure and no wind. A deep low and a sustained southwesterly can add half a metre to a prediction, and on this coast half a metre is the difference between a wet lane and a wet kitchen.',
+          'The tables are reliable about timing and only approximately right about height, which is the opposite of how most people read them.',
+        ]),
+        h2('The part that goes to court'),
+        p(
+          'In 2019 a dispute over a field boundary near Oldbury turned on where mean high water had been in 1954. The claimant had aerial photographs. The defendant had Pritchard, or rather a plan derived from a plan derived from Pritchard. Neither party had anything from the tide itself, because the tide does not keep records; it only keeps changing the thing the records describe.',
+        ),
+        p(
+          'The judgment ran to forty pages and turned, in the end, on the position of a hedge.',
         ),
         quote(
           'The map is not the territory, but it is the thing the court will look at.',
+        ),
+        p(
+          'This is not an argument against surveying. It is an argument for reading a survey as a dated document — a claim made by a particular person, in a particular boat, in a particular year, about something that had already started moving before he got back to shore.',
         ),
       ],
       seo: {
@@ -533,7 +502,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       slug: {_type: 'slug', current: 'last-bottle-kiln'},
       standfirst:
         'There were four hundred of them within living memory. Now there is one that still fires, and the man who fires it is seventy-three.',
-      coverImage: image('cover-kiln'),
       publishedAt: '2026-03-14T09:00:00.000Z',
       featured: false,
       author: ref('author-iriarte'),
@@ -541,32 +509,46 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       topics: [keyedRef('topic-craft')],
       body: [
         p(
-          'A bottle kiln is not a kiln inside a building. The building **is** the kiln: a brick bottle thirty feet high, with the firing chamber at its base and the whole structure acting as the chimney.',
+          'A bottle kiln is not a kiln inside a building. The building **is** the kiln: a brick bottle some thirty feet high, with the firing chamber at its base and the whole structure acting as the chimney. From outside it looks like industrial architecture. From inside it is a single enormous appliance.',
         ),
         p(
-          'Firing one takes about forty hours and roughly two tonnes of coal. It cannot be paused.',
+          'There were something over four thousand of them in North Staffordshire in 1910. The Clean Air Act of 1956 finished most of what economics had started, and by 1978 the last commercial firing had happened. Forty-seven survive as listed structures. One still fires.',
         ),
         gallery(
           ['body-kiln-interior', 'body-kiln-tools', 'body-kiln-stack'],
           'grid',
         ),
         h2('Forty hours'),
+        p(
+          'A firing takes about forty hours and roughly two tonnes of coal, and it cannot be paused. Once the chamber is above about 600°C the only way out is forwards.',
+        ),
         p('The sequence has not changed much since the 1880s:'),
         ...numbered([
-          'Pack the saggars, and pack them evenly, or the stack shifts at temperature.',
-          'Bring the heat up slowly for the first twelve hours.',
-          'Hold at top temperature until the trial rings say otherwise.',
-          'Let it fall on its own. Opening early cracks everything inside.',
+          'Pack the saggars — the fireclay boxes that hold the ware — and pack them evenly, or the stack shifts at temperature and takes a column of pots down with it.',
+          'Bring the heat up slowly for the first twelve hours. Too fast and any water left in the clay turns to steam inside the body of the pot.',
+          'Hold at top temperature, about 1,120°C, until the trial rings say otherwise. The rings are drawn out through a spy hole with an iron rod and quenched; you read the glaze on them.',
+          'Let it fall on its own, which takes another day. Opening early cracks everything inside.',
         ]),
         aside(
           'Do not try this at home',
           [
-            'A firing produces carbon monoxide at the base of the kiln throughout. The ventilation that makes the kiln work is the same ventilation that keeps the person firing it alive.',
+            'A firing produces carbon monoxide at the base of the kiln throughout. The draught that makes the kiln work is the same draught that keeps the person firing it alive, and it depends on wind direction.',
           ],
           'caution',
         ),
+        h3('Reading the rings'),
+        p(
+          'There is a pyrometer now, bolted to the wall in a steel box, and the man who fires the kiln looks at it perhaps twice in forty hours. The rings tell him what he needs and the colour through the spy hole tells him the rest. Straw colour is not hot enough. Lemon is close. He describes the target as "like looking into the sun with your eyes shut", which is not a measurement and is also exactly right.',
+        ),
         pullQuote(
           'You do not learn this from a book. You learn it from standing next to someone for ten years.',
+        ),
+        p(
+          'He started in 1969, at fifteen, sweeping. He was allowed to touch the damper in 1974. He fired his first kiln alone in 1981, by which time the industry that trained him had largely stopped existing.',
+        ),
+        h2('After'),
+        p(
+          'The kiln fires twice a year now, for a trust, and the pots go to a shop and a mailing list. The economics are not really economics. The coal costs more than the ware is worth and the insurance costs more than the coal.',
         ),
         p('There is no apprentice.'),
       ],
@@ -579,7 +561,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       slug: {_type: 'slug', current: 'transhumance'},
       standfirst:
         'Twice a year the flocks move between winter and summer pasture, along routes older than any of the borders they now cross.',
-      coverImage: image('cover-transhumance'),
       publishedAt: '2026-04-02T09:00:00.000Z',
       featured: false,
       author: ref('author-okonkwo'),
@@ -587,16 +568,29 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       topics: [keyedRef('topic-migration'), keyedRef('topic-landscape')],
       body: [
         p(
-          'The drove roads are still there, and in several countries they are still legally protected — wide green corridors running through land that has otherwise been enclosed for two centuries.',
+          'The drove roads are still there, and in several countries they are still legally protected — wide green corridors running through land that has otherwise been enclosed for two centuries. In Spain they are cañadas reales, and there are about 125,000 kilometres of them. They are public land, ninety varas wide, which is a little over seventy-five metres.',
         ),
         p('Whether anyone still walks them is a different question.'),
         h2('Right of way'),
         p(
-          'Spain’s cañadas reales cover about 125,000 kilometres. They are public land. Every so often a shepherd drives a flock through the middle of Madrid to make the point that the right has not lapsed.',
+          'Every autumn a shepherd drives a flock through the centre of Madrid, down the Gran Vía, past the department stores, to make the point that the right has not lapsed. It is a piece of theatre and it is also a legal manoeuvre: rights of way in Spanish law can be weakened by disuse, and the walk is evidence of use.',
+        ),
+        p(
+          'The flock is around 1,500 head. The city pays a toll, notionally, of fifty maravedís per thousand animals — a coin that has not been minted since the nineteenth century, so it is settled in a token payment and a photograph.',
         ),
         quote(
           'A right you never exercise is a right you are in the process of losing.',
         ),
+        h2('The practical version'),
+        p(
+          'Away from the cameras the movement is mostly by lorry now. A flock that took three weeks to walk from Extremadura to the Cantabrian pastures takes eight hours on the A-66, and the lorry does not need a shepherd, three dogs and a route with water on it every fifteen kilometres.',
+        ),
+        p(
+          'What the lorry does not do is graze the corridor on the way. The cañadas were maintained by the animals that used them; without that, scrub closes in, and a right of way that cannot be walked is harder to defend than one that can.',
+        ),
+        aside('Where to see it', [
+          'The Fiesta de la Trashumancia runs through central Madrid on a Sunday in late October. The route and date are announced only a few weeks ahead, because it depends on the weather at the other end.',
+        ]),
       ],
       seo: null,
     },
@@ -607,7 +601,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       slug: {_type: 'slug', current: 'a-signal-in-the-noise'},
       standfirst:
         'For thirty years a transmitter on a Yorkshire hillside broadcast a sequence of numbers to nobody in particular. Then, one Tuesday, it stopped.',
-      coverImage: image('cover-signal'),
       publishedAt: '2026-06-20T09:00:00.000Z',
       featured: false,
       author: ref('author-delacroix'),
@@ -636,7 +629,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       slug: {_type: 'slug', current: 'the-ledger-that-outlived-the-company'},
       standfirst:
         'When the mill closed, the receivers took the machinery and left the paperwork. Forty years later the paperwork is the only reason anyone can prove they worked there.',
-      coverImage: image('cover-ledger'),
       publishedAt: '2026-07-11T09:00:00.000Z',
       featured: false,
       author: ref('author-okonkwo'),
@@ -644,20 +636,40 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       topics: [keyedRef('topic-archive'), keyedRef('topic-craft')],
       body: [
         p(
-          'Industrial disease claims turn on employment history. No employer, no personnel department, no record — no claim.',
+          'Industrial disease claims turn on employment history. To bring one you must show where you worked, when, and what you were exposed to. No employer, no personnel department, no record — no claim, however obvious the illness.',
         ),
         p(
           'Which is how a wages ledger rescued from a skip in 1983 came to be the decisive evidence in a case heard in 2021.',
         ),
-        h3('What survived'),
+        h2('What survived'),
+        p(
+          'The mill closed in March 1979. The receivers took the machinery, the vehicles and the fixtures, and left the paperwork, because paperwork has no resale value. A former timekeeper, told the building was being cleared, filled the boot of a Cortina with what he could reach.',
+        ),
         ...bullets([
           'Wages books, 1961 to 1979, complete',
           'Accident book, 1968 to 1974, partial',
+          'Two boxes of clock cards, undated',
           'Everything else: gone',
         ]),
+        p(
+          'He kept them in a garage for twenty-six years. In 2009 he gave them to the county record office, who catalogued them, digitised them in 2016, and put the finding aid on a shelf.',
+        ),
+        pullQuote(
+          'The records that survive are not the important ones. They are the ones somebody happened to be able to carry.',
+        ),
+        h2('The case'),
+        p(
+          'The claimant had worked at the mill between 1971 and 1977 and had no documents at all — no payslips, no contract, no P60s. The company had been dissolved, its insurer had been through two mergers, and the insurer\u2019s position was that there was no evidence he had ever been employed there.',
+        ),
+        p(
+          'The wages books listed him by name, works number and department, week by week, for six years. The department was the one where the dust was.',
+        ),
         aside('Where it lives now', [
-          'The ledgers are held by the county record office and have been digitised. Access is free; the finding aid is not online.',
+          'The ledgers are held by the county record office and have been digitised. Access is free and the catalogue reference is straightforward once you know it exists; the finding aid is not online, which is the part that matters.',
         ]),
+        p(
+          'There is no policy here, no lesson about archives that anyone acted on. A man put some books in a car boot because it seemed wrong to leave them, and forty-two years later that decision was worth a great deal of money to somebody he never met.',
+        ),
       ],
       seo: null,
     },
@@ -669,7 +681,6 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
       slug: {_type: 'slug', current: 'harbour-lights'},
       standfirst:
         'A short dispatch from a working harbour at two in the morning, when the only people awake are the ones loading ice.',
-      coverImage: image('cover-harbour'),
       publishedAt: '2026-08-05T21:30:00.000Z',
       featured: false,
       author: ref('author-iriarte'),
@@ -679,6 +690,78 @@ function buildDocuments(assets: Map<string, string>): SeedDocument[] {
           'The boats go out at four. The ice arrives at two, which means somebody has been awake since midnight making it.',
         ),
         p('Nobody photographs this part.'),
+      ],
+      seo: null,
+    },
+
+    {
+      // Short note. Not everything is a 1,200-word report.
+      _id: 'article-green-oak',
+      _type: 'article',
+      title: 'Green Oak, and Waiting',
+      slug: {_type: 'slug', current: 'green-oak-and-waiting'},
+      standfirst:
+        'The rule of thumb is an inch a year. For the beams of a small barn, that is a decision someone made before you were born.',
+      publishedAt: '2026-05-08T09:00:00.000Z',
+      featured: false,
+      author: ref('author-okonkwo'),
+      issue: ref('issue-two'),
+      topics: [keyedRef('topic-craft')],
+      body: [
+        p(
+          'Air-dried oak loses moisture at roughly an inch of thickness a year. A four-inch beam is therefore four years from the saw, and nobody has found a way to hurry it that does not show up later as a split running the length of the timber.',
+        ),
+        p(
+          'Kilning gets there in weeks. It also drives the moisture out unevenly, and in structural sections that unevenness is a stress the frame has to carry for its whole life.',
+        ),
+        p(
+          'So the stack behind the workshop is not storage. It is the part of the job that was started by whoever was here before, and the part of it you do for whoever comes next.',
+        ),
+      ],
+      seo: null,
+    },
+    {
+      _id: 'article-abergwesyn',
+      _type: 'article',
+      title: 'Eleven Miles Unsurfaced',
+      slug: {_type: 'slug', current: 'eleven-miles-unsurfaced'},
+      standfirst:
+        'The Abergwesyn pass carries no gritters, no white lines and, for most of the winter, no traffic. It is still a public road.',
+      publishedAt: '2026-05-22T09:00:00.000Z',
+      featured: false,
+      author: ref('author-delacroix'),
+      issue: ref('issue-two'),
+      topics: [keyedRef('topic-landscape')],
+      body: [
+        p(
+          'Between Abergwesyn and Tregaron the road runs unsurfaced for about eleven miles, climbing to roughly 440 metres at the Devil’s Staircase. There is one cattle grid, no passing-place markings worth the name, and a gradient that in places touches 25 per cent.',
+        ),
+        p(
+          'It appears on the map exactly as any other unclassified road appears. That is the whole problem with maps, and the reason people who live at either end give directions by time rather than distance.',
+        ),
+        aside('If you are driving it', [
+          'Low gear down the Staircase, not brakes. The surface is loose enough that a locked wheel simply carries on.',
+        ], 'caution'),
+      ],
+      seo: null,
+    },
+    {
+      // A single-paragraph fragment. A magazine has these; a content model that
+      // cannot hold one is a content model that produces evenly-sized filler.
+      _id: 'article-slack',
+      _type: 'article',
+      title: 'Two Inches of Slack',
+      slug: {_type: 'slug', current: 'two-inches-of-slack'},
+      standfirst:
+        'On rigging a load that has to move, and why the tightest strap is the wrong one.',
+      publishedAt: '2026-06-02T09:00:00.000Z',
+      featured: false,
+      author: ref('author-iriarte'),
+      topics: [keyedRef('topic-craft')],
+      body: [
+        p(
+          'Every rigger says a version of the same thing: the strap you pull hardest is the one that fails. A load on a trailer moves — over a cattle grid, into a dip, under braking — and a strap with no give in it takes that movement as shock rather than as travel. Two inches of slack, taken up by a ratchet that can still turn, absorbs what a bar-tight strap transmits. It looks worse. It is the reason the load is still on the trailer at the other end.',
+        ),
       ],
       seo: null,
     },

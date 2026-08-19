@@ -45,35 +45,6 @@ export const article = defineType({
       ],
     }),
     defineField({
-      name: 'coverImage',
-      title: 'Cover image',
-      type: 'image',
-      group: 'content',
-      options: {hotspot: true},
-      description:
-        'Landscape works best. Use the hotspot to set what stays visible when the image is cropped square on the homepage.',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alternative text',
-          type: 'string',
-          description:
-            'Describe the image for someone who cannot see it.',
-          validation: (rule) =>
-            rule
-              .required()
-              .error('Alt text is required — the page fails accessibility without it'),
-        }),
-        defineField({
-          name: 'credit',
-          title: 'Credit',
-          type: 'string',
-          description: 'Photographer or source.',
-        }),
-      ],
-      validation: (rule) => rule.required().error('Every article needs a cover image'),
-    }),
-    defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',
@@ -149,11 +120,10 @@ export const article = defineType({
     select: {
       title: 'title',
       author: 'author.name',
-      media: 'coverImage',
       publishedAt: 'publishedAt',
       featured: 'featured',
     },
-    prepare: ({title, author, media, publishedAt, featured}) => {
+    prepare: ({title, author, publishedAt, featured}) => {
       const date = publishedAt
         ? new Date(publishedAt).toLocaleDateString('en-GB', {
             day: 'numeric',
@@ -164,7 +134,6 @@ export const article = defineType({
       return {
         title: (featured ? '★ ' : '') + (title || 'Untitled article'),
         subtitle: (author ? author + ' · ' : '') + date,
-        media,
       }
     },
   },
