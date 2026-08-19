@@ -24,9 +24,20 @@ export default async function SiteLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Visible only once focused, which is the point: a keyboard reader
+          should not have to tab through the whole nav on every page. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:font-meta focus:text-[0.7rem] focus:tracking-[0.14em] focus:text-paper focus:uppercase"
+      >
+        Skip to content
+      </a>
+
       {isDraft ? <DraftModeBanner /> : null}
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main id="main" className="flex-1">
+        {children}
+      </main>
       <SiteFooter />
       {isDraft ? <VisualEditing /> : null}
     </div>

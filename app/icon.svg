@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The same two inks and the same misregistration as the artwork on the
+       site: the ochre mark sits a shade off the moss one, the way a second
+       pass lands on paper that has shifted. -->
+  <rect width="32" height="32" fill="#EFEAE0"/>
+  <g style="mix-blend-mode:multiply">
+    <path d="M2 24 L11 11 L18 20 L24 13 L30 24 Z" fill="#3D5142" opacity="0.8"/>
+  </g>
+  <g style="mix-blend-mode:multiply" transform="translate(1.5 -1.5)">
+    <path d="M2 24 L11 11 L18 20 L24 13 L30 24 Z" fill="#B8642A" opacity="0.65"/>
+  </g>
+</svg>
