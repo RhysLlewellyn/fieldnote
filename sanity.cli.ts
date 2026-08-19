@@ -14,4 +14,18 @@ export default defineCliConfig({
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   },
   autoUpdates: false,
+  /**
+   * `sanity schema extract --enforce-required-fields` then
+   * `sanity typegen generate` writes sanity/lib/generated.ts.
+   *
+   * Without the enforce flag every field comes out nullable, including the
+   * ones the schema marks required, and the app ends up guarding against
+   * absences that validation already prevents.
+   */
+  typegen: {
+    path: './sanity/lib/queries.ts',
+    schema: './sanity/extract.json',
+    generates: './sanity/lib/generated.ts',
+    overloadClientMethods: false,
+  },
 })

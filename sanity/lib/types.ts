@@ -1,33 +1,75 @@
-import type {PortableTextBlock} from 'next-sanity'
+import type {
+  ArticleBySlugQueryResult,
+  ArticlesQueryResult,
+  AuthorBySlugQueryResult,
+  HomeQueryResult,
+  IssueBySlugQueryResult,
+  IssuesQueryResult,
+  PageBySlugQueryResult,
+  SiteSettingsQueryResult,
+  TopicBySlugQueryResult,
+  TopicsQueryResult,
+} from './generated'
 
 /**
- * The shapes the queries in ./queries.ts return.
+ * The names the app uses for what the queries return.
  *
- * Hand-written for now. Once the project has credentials, `sanity schema
- * extract` and `sanity typegen generate` derive these from the schema and the
- * `defineQuery` calls, and this file becomes generated rather than maintained.
- * Until then it is the only thing keeping the components honest, so it is
- * worth keeping in step with the queries.
+ * Nothing is described by hand here. Every type below is derived from
+ * `./generated.ts`, which `sanity typegen` writes from the schema and the
+ * `defineQuery` calls in `./queries.ts`:
+ *
+ *   npx sanity schema extract --path sanity/extract.json --force \
+ *     --enforce-required-fields
+ *   npx sanity typegen generate
+ *
+ * Run both after changing a schema or a query. A hand-maintained copy of these
+ * shapes drifts from the queries silently, and the first symptom is a page
+ * rendering "undefined" in production.
+ *
+ * The aliases exist because generated names describe the query that produced
+ * them rather than the thing they are, and a component should ask for an
+ * `Article`, not an `ArticleBySlugQueryResult`.
  */
 
-export type SanityImage = {
-  _type: string
-  alt?: string
-  credit?: string
-  hotspot?: {x: number; y: number; width: number; height: number}
-  crop?: {top: number; bottom: number; left: number; right: number}
-  asset: {
-    _id: string
-    url: string
-    metadata?: {
-      lqip?: string
-      dimensions?: {width: number; height: number; aspectRatio: number}
-    }
-  }
-}
+// -- Documents ----------------------------------------------------------------
+
+export type SiteSettings = NonNullable<SiteSettingsQueryResult>
+export type HomePage = HomeQueryResult
+
+/** An article as a list shows it: no body, no SEO. */
+export type ArticleCard = ArticlesQueryResult[number]
+export type Article = NonNullable<ArticleBySlugQueryResult>
+
+export type IssueCard = IssuesQueryResult[number]
+export type Issue = NonNullable<IssueBySlugQueryResult>
+
+export type TopicWithCount = TopicsQueryResult[number]
+export type Topic = NonNullable<TopicBySlugQueryResult>
+
+export type Author = NonNullable<AuthorBySlugQueryResult>
+export type Page = NonNullable<PageBySlugQueryResult>
+
+export type Seo = NonNullable<Article['seo']>
 
 // -- Portable Text ------------------------------------------------------------
 
+/** Anything that can appear in an article or page body. */
+export type BodyBlock = NonNullable<Article['body']>[number]
+
+type BlockOfType<T extends BodyBlock['_type']> = Extract<BodyBlock, {_type: T}>
+
+export type PullQuoteBlock = BlockOfType<'pullQuote'>
+export type CaptionedImageBlock = BlockOfType<'captionedImage'>
+export type ImageGalleryBlock = BlockOfType<'imageGallery'>
+export type NoteAsideBlock = BlockOfType<'noteAside'>
+
+/**
+ * The link annotation, as it appears in `markDefs`.
+ *
+ * Portable Text types annotations as a union keyed by `_type`, and the
+ * renderer receives one member of it without narrowing, so this pulls out the
+ * one shape the link component cares about.
+ */
 export type LinkAnnotation = {
   _type: 'link'
   _key: string
@@ -35,167 +77,13 @@ export type LinkAnnotation = {
   openInNewTab?: boolean
 }
 
-export type PullQuoteBlock = {
-  _type: 'pullQuote'
-  _key: string
-  quote: string
-  attribution?: string
-}
-
-export type CaptionedImageBlock = SanityImage & {
-  _type: 'captionedImage'
-  _key: string
-  alt: string
-  caption?: string
-}
-
-export type ImageGalleryBlock = {
-  _type: 'imageGallery'
-  _key: string
-  images: CaptionedImageBlock[]
-  layout: 'grid' | 'sideBySide'
-}
-
-export type NoteAsideBlock = {
-  _type: 'noteAside'
-  _key: string
-  title: string
-  content: PortableTextBlock[]
-  tone: 'note' | 'caution'
-}
-
-/** Anything that can appear in an article or page body. */
-export type BodyBlock =
-  | PortableTextBlock
-  | PullQuoteBlock
-  | CaptionedImageBlock
-  | ImageGalleryBlock
-  | NoteAsideBlock
-
-// -- Documents ----------------------------------------------------------------
-
-export type Seo = {
-  title?: string
-  description?: string
-  ogImage?: SanityImage
-}
-
-export type TopicRef = {
-  _id: string
-  title: string
-  slug: string
-}
-
-export type AuthorRef = {
-  name: string
-  slug: string
-}
-
-export type IssueRef = {
-  number: number
-  title: string
-  slug: string
-}
-
-export type ArticleCard = {
-  _id: string
-  title: string
-  slug: string
-  standfirst: string
-  publishedAt: string
-  featured?: boolean
-  /** Minutes, computed in GROQ from the body's plain text. */
-  readingTime: number
-  author: AuthorRef | null
-  issue: IssueRef | null
-  topics: TopicRef[] | null
-}
-
-export type Article = {
-  _id: string
-  title: string
-  slug: string
-  standfirst: string
-  publishedAt: string
-  body: BodyBlock[] | null
-  author: {
-    name: string
-    slug: string
-    role?: string
-    bio?: PortableTextBlock[]
-  } | null
-  issue: IssueRef | null
-  topics: TopicRef[] | null
-  seo: Seo | null
-}
-
-export type IssueCard = {
-  _id: string
-  number: number
-  title: string
-  slug: string
-  publishedAt: string
-  articleCount: number
-}
-
-export type Issue = {
-  _id: string
-  number: number
-  title: string
-  slug: string
-  publishedAt: string
-  colophon?: string
-  introduction: BodyBlock[] | null
-  articles: ArticleCard[]
-}
-
-export type Topic = {
-  _id: string
-  title: string
-  slug: string
-  description?: string
-  articles: ArticleCard[]
-}
-
-export type TopicWithCount = Omit<Topic, 'articles'> & {articleCount: number}
-
-export type Author = {
-  _id: string
-  name: string
-  slug: string
-  role?: string
-  bio?: PortableTextBlock[]
-  links: {label: string; url: string}[] | null
-  articles: ArticleCard[]
-}
-
-export type Page = {
-  _id: string
-  title: string
-  slug: string
-  body: BodyBlock[] | null
-  seo: Seo | null
-}
-
-export type SiteSettings = {
-  title: string
-  description: string
-  defaultOgImage?: SanityImage
-  navigation: {label: string; href: string}[] | null
-  footerText?: string
-  socialLinks: {label: string; url: string}[] | null
-}
-
-export type HomePage = {
-  featured: ArticleCard | null
-  recent: ArticleCard[]
-  latestIssue: Omit<IssueCard, 'articleCount'> | null
-}
-
 /**
+ * An image with its asset resolved.
+ *
  * Imagery is generated from a seed rather than uploaded, so no document type
- * carries a cover image any more. `SanityImage` survives for the two places
- * a real file is still the right answer: images an editor places inside an
- * article body, and the social share image, which has to be a raster URL a
- * third-party crawler can fetch.
+ * carries a cover image any more. This survives for the two places a real file
+ * is still the right answer: images an editor places inside an article body,
+ * and the social share image, which has to be a raster URL a third-party
+ * crawler can fetch.
  */
+export type SanityImage = CaptionedImageBlock

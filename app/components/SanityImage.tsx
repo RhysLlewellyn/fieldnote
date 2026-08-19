@@ -37,9 +37,14 @@ export function SanityImage({
   priority = false,
   className,
 }: Props) {
+  // The asset reference can be absent — an editor can add an image block and
+  // save before choosing a file. Rendering nothing beats rendering a broken
+  // image with a valid-looking caption underneath it.
+  if (!image.asset) return null
+
   const ratio = aspect ?? image.asset.metadata?.dimensions?.aspectRatio ?? 3 / 2
   const height = Math.round(width / ratio)
-  const lqip = image.asset.metadata?.lqip
+  const lqip = image.asset.metadata?.lqip ?? undefined
 
   const src = aspect
     ? urlForImage(image).width(width).height(height).fit('crop').url()

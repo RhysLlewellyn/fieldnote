@@ -1,5 +1,4 @@
 import {toPlainText} from 'next-sanity'
-import type {PortableTextBlock} from 'next-sanity'
 
 import type {BodyBlock} from '@/sanity/lib/types'
 
@@ -41,7 +40,8 @@ export function readingTime(body: BodyBlock[] | null | undefined): number {
   if (!body?.length) return 1
 
   const prose = body.filter(
-    (block): block is PortableTextBlock => block._type === 'block',
+    (block): block is Extract<BodyBlock, {_type: 'block'}> =>
+      block._type === 'block',
   )
   const words = toPlainText(prose).trim().split(/\s+/).filter(Boolean).length
 
