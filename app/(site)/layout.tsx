@@ -1,9 +1,24 @@
+import type {Metadata} from 'next'
 import {draftMode} from 'next/headers'
 import {VisualEditing} from 'next-sanity/visual-editing'
 
 import {DraftModeBanner} from '@/app/components/DraftModeBanner'
 import {SiteFooter} from '@/app/components/SiteFooter'
 import {SiteHeader} from '@/app/components/SiteHeader'
+import {siteUrl} from '@/app/lib/site-url'
+
+/**
+ * Advertises the feed to readers and to anything that looks for one. It sits
+ * on the (site) group rather than the root layout so the Studio, which is an
+ * application and has nothing to syndicate, does not claim to have a feed.
+ */
+export const metadata: Metadata = {
+  alternates: {
+    types: {
+      'application/rss+xml': [{url: `${siteUrl()}/feed.xml`, title: 'Fieldnote'}],
+    },
+  },
+}
 
 /**
  * The chrome every page of the site proper gets: header, footer, and a main
