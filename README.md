@@ -4,6 +4,38 @@ A magazine site: [Next.js](https://nextjs.org) App Router on the front, [Sanity]
 
 The Studio is embedded at `/studio` rather than hosted separately, so there is one deploy, one domain, and one thing for an editor to bookmark.
 
+**Live site:** <https://fieldnote-one.vercel.app>
+**Studio:** <https://fieldnote-one.vercel.app/studio>
+
+## Lighthouse
+
+Measured against the live URL, not localhost, on Lighthouse 13.4.1 with its
+default mobile profile — simulated 4G and a 4x CPU slowdown.
+
+| | Performance | Accessibility | Best Practices | SEO |
+| --- | --- | --- | --- | --- |
+| [Homepage](https://fieldnote-one.vercel.app) | 96 | 100 | 100 | 100 |
+| [Article](https://fieldnote-one.vercel.app/articles/tideline-moves-twice-a-day) | 96 | 100 | 100 | 100 |
+
+Homepage: FCP 1.2s, LCP 2.8s, TBT 10ms, CLS 0, Speed Index 1.9s.
+Article: FCP 1.0s, LCP 2.7s, TBT 20ms, CLS 0, Speed Index 1.0s.
+
+![Lighthouse report for the homepage](docs/lighthouse-home.png)
+
+![Lighthouse report for an article page](docs/lighthouse-article.png)
+
+Cumulative Layout Shift is 0 on both, which is the number worth looking at:
+every image is generated at a known aspect ratio and every font is loaded with
+a metric-matched fallback, so nothing moves once it has painted.
+
+## Studio demo access
+
+> **TODO — Rhys to create a viewer-role user in Sanity and paste here.**
+>
+> A read-only account so anyone can open the Studio, click through the content
+> model and see the validation and previews, without being able to change
+> anything. Sanity → Members → Invite, role Viewer.
+
 ## Getting started
 
 ```bash

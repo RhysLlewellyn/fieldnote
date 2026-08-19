@@ -46,3 +46,6 @@ next-env.d.ts
 # Intermediate output of `sanity schema extract`, regenerated on demand.
 # sanity/lib/generated.ts is committed; this is not.
 sanity/extract.json
+
+# Lighthouse raw reports. The screenshots in docs/ are what is committed.
+lighthouse*.report.*
