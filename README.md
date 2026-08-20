@@ -7,6 +7,12 @@ The Studio is embedded at `/studio` rather than hosted separately, so there is o
 **Live site:** <https://fieldnote-one.vercel.app>
 **Studio:** <https://fieldnote-one.vercel.app/studio>
 
+**▶ [Watch the Studio being used — 45 seconds](https://www.loom.com/share/6020346d544c4e5180092d1ecdab1f66)**
+Opening an article, changing the standfirst, watching that change render on the
+real site while it is still unpublished, and then publishing it. No narration.
+If you only look at one thing here, look at this — it is the answer to what
+this is like for an editor, which a screenshot cannot give you.
+
 ## Lighthouse
 
 Measured against the live URL, not localhost, on Lighthouse 13.4.1 with its
@@ -47,6 +53,10 @@ CLS at 0 means the metric-matched fallbacks and the fixed-row header are doing
 their job.
 
 ## Studio and content
+
+The 45-second walkthrough linked at the top of this README shows the editing
+experience end to end; the rest of this section is what you can reach without
+asking anyone.
 
 The dataset is public, so the content is queryable without an account. Every
 article on the site comes from here:
