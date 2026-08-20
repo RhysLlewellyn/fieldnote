@@ -48,9 +48,9 @@ their job.
 
 ## Studio demo access
 
-The Studio is at <https://fieldnote-one.vercel.app/studio>. It runs against a
-private dataset, so it needs an account rather than a link — read-only access
-is available on request, same day.
+The Studio is at <https://fieldnote-one.vercel.app/studio>. Opening it is a
+question of project membership rather than of knowing the URL, so it needs an
+account — read-only access is available on request, same day.
 
 A Viewer sees everything an editor sees and can change none of it: the content
 model, the field descriptions, the validation rules, and the side-by-side
@@ -83,7 +83,7 @@ The same licence forbids subsetting, which is why the woff2 ships whole.
 | `SANITY_REVALIDATE_SECRET` | the publish webhook | any long random string |
 | `SANITY_API_WRITE_TOKEN` | `npm run seed` only | API → Tokens → **Editor** |
 
-The two `NEXT_PUBLIC_` values reach the browser and are safe there — they identify the dataset, they do not grant access to it. The rest are server-only and must never gain that prefix.
+The two `NEXT_PUBLIC_` values reach the browser, which is where they belong. The dataset is public, so they do identify content anyone can then query directly — but that content is what the site already serves to the same visitor. What they cannot reach is drafts: Sanity treats any `_id` containing a dot, which includes every `drafts.*`, as readable only with a token, whatever the dataset's visibility. The rest of the table is server-only and must never gain that prefix.
 
 `SANITY_API_WRITE_TOKEN` is the one to be careful with: it can change anything in the dataset, nothing at runtime reads it, and it should be revoked once the dataset is populated.
 
