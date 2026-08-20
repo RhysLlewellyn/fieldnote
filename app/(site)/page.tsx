@@ -111,10 +111,7 @@ export default async function HomePage() {
       {latestIssue ? (
         <section className="mt-20 flex flex-wrap items-baseline justify-between gap-x-10 gap-y-3 border-t border-rule pt-8">
           <div>
-            <p className="font-meta text-[0.7rem] tracking-[0.14em] text-muted uppercase">
-              Current issue
-            </p>
-            <h2 className="font-display mt-2 text-[1.75rem] leading-[1.15] tracking-[-0.02em]">
+            <h2 className="font-display text-[1.75rem] leading-[1.15] tracking-[-0.02em]">
               <Link href={`/issues/${latestIssue.slug}`} className="hover:text-ochre">
                 {String(latestIssue.number).padStart(2, '0')} — {latestIssue.title}
               </Link>

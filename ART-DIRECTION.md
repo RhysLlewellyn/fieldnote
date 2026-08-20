@@ -77,6 +77,20 @@ These are what make it read as designed rather than themed. Do not skip them.
 - **Asides** — 3px moss left border, mono label above the text.
 - **Captions** — mono, muted, description left, credit pushed right on the same line.
 - **Index rows** — number, title with mono sub-line, reading time right; hairline between.
+- **Topic kicker** — the topic name in mono ochre, tracked and uppercase, above an article
+  headline. One per headline, and only the topic; never a label invented for the layout.
+
+### The kicker is a deliberate exception
+
+Automated design audits ban the small tracked label above a heading outright — `/impeccable`
+calls it "a ban, not a default: no brief earns it back". It is kept here anyway. It is in
+`art-direction-reference.html`, it is how a magazine signals section before it signals story,
+and a topic name is real information rather than decoration.
+
+What the ban is actually right about is the invented kicker. A "Current issue" label above
+the issue block on the homepage had no backing in the reference and said nothing the block
+did not already say; it has been removed. The rule is therefore: a kicker carries a topic, or
+it does not exist.
 
 ## Motion
 
