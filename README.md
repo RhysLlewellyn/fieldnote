@@ -12,18 +12,26 @@ The Studio is embedded at `/studio` rather than hosted separately, so there is o
 Measured against the live URL, not localhost, on Lighthouse 13.4.1 with its
 default mobile profile — simulated 4G and a 4x CPU slowdown.
 
-| | Performance | Accessibility | Best Practices | SEO |
-| --- | --- | --- | --- | --- |
-| [Homepage](https://fieldnote-one.vercel.app) | 95 | 100 | 100 | 100 |
-| [Article](https://fieldnote-one.vercel.app/articles/tideline-moves-twice-a-day) | 96 | 100 | 100 | 100 |
+| | Performance | Accessibility | Best Practices | SEO | Agentic Browsing |
+| --- | --- | --- | --- | --- | --- |
+| [Homepage](https://fieldnote-one.vercel.app) | 97 | 100 | 100 | 100 | 100 |
+| [Article](https://fieldnote-one.vercel.app/articles/tideline-moves-twice-a-day) | 95 | 100 | 100 | 100 | 100 |
 
-Homepage: FCP 0.8s, LCP 2.9s, TBT 30ms, CLS 0, Speed Index 2.4s.
-Article: FCP 1.0s, LCP 2.8s, TBT 10ms, CLS 0, Speed Index 1.0s.
+Homepage: FCP 1.1s, LCP 2.6s, TBT 20ms, CLS 0, Speed Index 1.2s.
+Article: FCP 0.9s, LCP 2.9s, TBT 20ms, CLS 0, Speed Index 2.5s.
+
+Agentic Browsing is the fifth category, new in Lighthouse 13 and still marked
+as under development. It measures whether a page is legible to an automated
+agent rather than only to a human reader or a search crawler: whether the
+accessibility tree it exposes is well-formed enough to be navigated
+programmatically, whether the layout is stable enough to act on, and whether
+the site states its own structure in [`/llms.txt`](https://fieldnote-one.vercel.app/llms.txt).
+That last audit reported nothing at all until the file existed.
 
 Performance is the only category that moves between runs. Across three
-measurements the homepage scored 95, 96 and 97, and the article 94, 96 and 96 —
+measurements the homepage scored 97, 97 and 96, and the article 95, 97 and 97 —
 Lighthouse's simulated throttling has a few points of variance, and the article
-sits close enough to 95 that a slow run can dip below it. The other three
+sits close enough to 95 that a slow run can dip below it. The other four
 categories are 100 every time. The numbers above are from the run captured in
 the screenshots.
 
@@ -34,7 +42,7 @@ the screenshots.
 Cumulative Layout Shift is 0 on both. That is worth stating carefully, because
 an earlier version of this build also reported 0 for the wrong reason: the
 typefaces were not rendering at all, so there was no font swap to shift
-anything. With Fraunces, Newsreader and IBM Plex Mono actually applied, holding
+anything. With Zodiak, Newsreader and IBM Plex Mono actually applied, holding
 CLS at 0 means the metric-matched fallbacks and the fixed-row header are doing
 their job.
 
@@ -54,6 +62,13 @@ cp .env.example .env.local   # then fill it in, see below
 npm run dev                  # http://localhost:3001
 npm run seed                 # content to build against
 ```
+
+`dev` and `build` both run `scripts/fetch-fonts.mjs` first, which downloads the
+display face into `app/fonts/`. That needs a network connection the first time
+and then never again. The face is Zodiak, from Fontshare: free for commercial
+use, but its licence permits self-hosting rather than redistribution, and it
+names public repositories specifically — so this one does not carry the file.
+The same licence forbids subsetting, which is why the woff2 ships whole.
 
 ### Environment
 
@@ -81,6 +96,7 @@ You also need your local URL registered as a CORS origin — API → CORS origin
 | `npm run start` | serve the production build |
 | `npm run lint` | eslint |
 | `npm run seed` | populate the dataset (needs the Editor token) |
+| `node scripts/fetch-fonts.mjs` | fetch the display face; `dev` and `build` do it for you |
 
 The dev port is pinned to 3001 rather than left at 3000, so the CORS origin registered with Sanity stays correct even when something else has taken 3000.
 
@@ -107,7 +123,9 @@ app/
 sanity/
   schemaTypes/     the content model — six document types, four custom blocks
   lib/             client, queries, generated types, the draft-aware fetch
-scripts/seed.mts   the seed described above
+scripts/
+  seed.mts         the seed described above
+  fetch-fonts.mjs  pulls the display face in, and explains why it is not here
 ```
 
 ### Imagery is generated, not stored
