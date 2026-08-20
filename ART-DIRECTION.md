@@ -22,24 +22,36 @@ Fieldnote uses **generated riso artwork**, never photographs.
   --color-ochre:   #B8642A;   /* editorial emphasis */
   --color-moss:    #3D5142;   /* structural asides */
 
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: "Zodiak", Georgia, serif;
   --font-body:    "Newsreader", Georgia, serif;
   --font-meta:    "IBM Plex Mono", ui-monospace, monospace;
 }
 ```
 
-Load with `next/font/google`, all three variable, `display: "swap"`, subset `latin`.
-Fraunces uses `font-variation-settings: "SOFT" 20, "WONK" 1` at display sizes — that's what
-gives it character rather than looking like default Georgia.
+Newsreader and IBM Plex Mono load with `next/font/google`, variable, `display: "swap"`,
+subset `latin`. Zodiak is not on Google Fonts — that is part of why it is here — so it loads
+with `next/font/local` from a file the build fetches from [Fontshare](https://www.fontshare.com/fonts/zodiak).
+It is free for commercial use, but its licence forbids both redistribution and subsetting, so
+the font is not committed to this repo and is never run through a subsetter.
+`scripts/fetch-fonts.mjs` holds the detail.
+
+Zodiak's only axis is weight. Nothing sets `font-variation-settings` on it: the weight in the
+table below is the whole instruction.
+
+**Display face history.** This was Fraunces, with its SOFT and WONK axes. Fraunces is one of
+a small set of faces that generated interfaces converge on, and with this audience that
+association is the problem — not the drawing, which is good. Zodiak gives the same
+high-contrast display serif with real character and no such inheritance. Newsreader stays;
+body text was never what was being read as generated.
 
 ## Type
 
 | Role | Face | Size | Leading | Tracking |
 |---|---|---|---|---|
-| Masthead | Fraunces 300 | `clamp(3.5rem, 11vw, 9rem)` | 0.86 | −0.035em |
-| Article h1 | Fraunces 300 | `clamp(2.25rem, 5vw, 3.25rem)` | 1.02 | −0.028em |
-| h2 | Fraunces 400 | 2.5rem | 1.08 | −0.02em |
-| h3 | Fraunces 500 | 1.5rem | 1.2 | 0 |
+| Masthead | Zodiak 300 | `clamp(3.5rem, 11vw, 9rem)` | 0.86 | −0.035em |
+| Article h1 | Zodiak 300 | `clamp(2.25rem, 5vw, 3.25rem)` | 1.02 | −0.028em |
+| h2 | Zodiak 400 | 2.5rem | 1.08 | −0.02em |
+| h3 | Zodiak 500 | 1.5rem | 1.2 | 0 |
 | Standfirst | Newsreader italic | 1.3rem | 1.5 | 0 |
 | Body | Newsreader 400 | 1.125rem | 1.7 | 0 |
 | Metadata | IBM Plex Mono 400 | 0.7rem | 1.6 | 0.14em, uppercase |
@@ -69,9 +81,9 @@ than a stock photo credit.
 
 These are what make it read as designed rather than themed. Do not skip them.
 
-- **Drop cap**, Fraunces, ochre, first paragraph of an article only. Never elsewhere.
+- **Drop cap**, Zodiak, ochre, first paragraph of an article only. Never elsewhere.
 - **Hanging punctuation** on body copy (`hanging-punctuation: first last`).
-- **Rules above and below pull quotes**, 2px solid ink, quote in Fraunces 300.
+- **Rules above and below pull quotes**, 2px solid ink, quote in Zodiak 300.
 - **Byline bar** — mono, uppercase, hairline rule top and bottom, author left, issue and
   reading time right.
 - **Asides** — 3px moss left border, mono label above the text.

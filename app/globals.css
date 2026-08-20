@@ -23,7 +23,7 @@
 
   /* The right-hand names come from next/font in the root layout, which
      self-hosts the files rather than calling Google at request time. */
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-display: var(--font-zodiak), Georgia, serif;
   --font-body: var(--font-newsreader), Georgia, serif;
   --font-meta: var(--font-plex-mono), ui-monospace, monospace;
 }
@@ -50,12 +50,13 @@ body {
 }
 
 /**
- * Fraunces has SOFT and WONK axes that are the whole reason to use it. Left at
- * their defaults it reads as a slightly-off Georgia.
+ * Zodiak's only axis is weight, and the weight utilities on the headings drive
+ * it directly. Fraunces needed a font-variation-settings override here to
+ * reach its SOFT and WONK axes; setting one now would pin the weight and
+ * silently break font-light on every headline.
  */
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 20, "WONK" 1;
 }
 
 a {

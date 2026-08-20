@@ -1,22 +1,33 @@
 import type {Metadata} from 'next'
-import {Fraunces, IBM_Plex_Mono, Newsreader} from 'next/font/google'
+import {IBM_Plex_Mono, Newsreader} from 'next/font/google'
+import localFont from 'next/font/local'
 
 import {getSiteSettings} from './lib/site'
 import './globals.css'
 
 /**
- * Three faces, each doing one job: Fraunces for display, Newsreader for
- * reading, Plex Mono for metadata.
+ * Three faces, each doing one job: Zodiak for display, Newsreader for reading,
+ * Plex Mono for metadata. Newsreader carries an italic because the standfirst
+ * is set in it.
  *
- * Fraunces is loaded with its SOFT and WONK axes because they are the point of
- * choosing it — a wonky, soft-terminalled serif rather than another Georgia.
- * Newsreader carries an italic because the standfirst is set in it.
+ * Zodiak comes from Fontshare rather than Google Fonts, and is loaded from
+ * disk rather than by name. `scripts/fetch-fonts.mjs` puts it there; the file
+ * is not in the repo, and that script explains why. Its one axis is weight,
+ * which the art direction uses at 300, 400 and 500, so the variable cut is
+ * both the smallest and the most flexible option.
+ *
+ * `adjustFontFallback` is what holds CLS at 0 through the swap: Next derives
+ * a size-adjusted @font-face from Times New Roman's metrics, so the fallback
+ * occupies the same space as the real face and nothing reflows when it lands.
+ * Georgia follows it for the case where neither is available.
  */
-const display = Fraunces({
-  variable: '--font-fraunces',
-  subsets: ['latin'],
+const display = localFont({
+  src: './fonts/Zodiak-Variable.woff2',
+  variable: '--font-zodiak',
   display: 'swap',
-  axes: ['SOFT', 'WONK'],
+  weight: '100 900',
+  fallback: ['Georgia', 'serif'],
+  adjustFontFallback: 'Times New Roman',
 })
 
 const body = Newsreader({
@@ -66,9 +77,9 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     /**
      * The font variables go on <html>, not <body>.
      *
-     * `@theme` declares --font-display as `var(--font-fraunces), Georgia,
+     * `@theme` declares --font-display as `var(--font-zodiak), Georgia,
      * serif` on :root. A custom property is substituted where it is declared,
-     * not where it is used, so with --font-fraunces defined on <body> the
+     * not where it is used, so with --font-zodiak defined on <body> the
      * reference resolves against :root, finds nothing, and --font-display
      * computes to an invalid value that every element then inherits. The
      * result is the whole site quietly falling back to Tailwind's default

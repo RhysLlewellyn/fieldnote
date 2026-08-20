@@ -49,3 +49,8 @@ sanity/extract.json
 
 # Lighthouse raw reports. The screenshots in docs/ are what is committed.
 lighthouse*.report.*
+
+# Zodiak, fetched from Fontshare by scripts/fetch-fonts.mjs on predev and
+# prebuild. Its licence permits self-hosting the deployed site but not
+# redistribution, and this repo is public, so the file cannot live in it.
+app/fonts/
