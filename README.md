@@ -46,15 +46,24 @@ anything. With Zodiak, Newsreader and IBM Plex Mono actually applied, holding
 CLS at 0 means the metric-matched fallbacks and the fixed-row header are doing
 their job.
 
-## Studio demo access
+## Studio and content
 
-The Studio is at <https://fieldnote-one.vercel.app/studio>. Opening it is a
-question of project membership rather than of knowing the URL, so it needs an
-account — read-only access is available on request, same day.
+The dataset is public, so the content is queryable without an account. Every
+article on the site comes from here:
 
-A Viewer sees everything an editor sees and can change none of it: the content
-model, the field descriptions, the validation rules, and the side-by-side
-preview that renders a draft on the real site before it is published.
+```text
+https://wcyiz8up.api.sanity.io/v2026-08-19/data/query/production?query=*[_type=="article"]{title,"slug":slug.current,publishedAt}
+```
+
+The Studio itself is at <https://fieldnote-one.vercel.app/studio> and needs a
+Sanity account — read-only Viewer access on request, same day. A Viewer sees
+what an editor sees and can change none of it: the field descriptions, the
+validation rules, and the side-by-side preview that renders a draft on the real
+site before it is published.
+
+Drafts stay private either way. They require a token, which is what that preview
+flow uses: Sanity will not serve an `_id` containing a dot to an anonymous
+caller, whichever way the dataset is set.
 
 ## Getting started
 
