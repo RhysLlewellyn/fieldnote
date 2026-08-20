@@ -48,11 +48,13 @@ their job.
 
 ## Studio demo access
 
-> **TODO — Rhys to create a viewer-role user in Sanity and paste here.**
->
-> A read-only account so anyone can open the Studio, click through the content
-> model and see the validation and previews, without being able to change
-> anything. Sanity → Members → Invite, role Viewer.
+The Studio is at <https://fieldnote-one.vercel.app/studio>. It runs against a
+private dataset, so it needs an account rather than a link — read-only access
+is available on request, same day.
+
+A Viewer sees everything an editor sees and can change none of it: the content
+model, the field descriptions, the validation rules, and the side-by-side
+preview that renders a draft on the real site before it is published.
 
 ## Getting started
 
