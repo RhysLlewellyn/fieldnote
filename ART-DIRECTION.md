@@ -84,43 +84,6 @@ A 150ms colour transition on links. Nothing animates on scroll. `prefers-reduced
 honoured regardless — and say so in the README, because it's the kind of thing this audience
 checks.
 
-## Not looking AI-generated
-
-The audience is design-led studios and editorial people. They detect the generated look
-quickly, and it is disqualifying. Three specific defences.
-
-### 1. Riso art must be imperfect
-
-Clean procedural shapes read as "AI abstract art". Three fixes, in order of effect:
-
-- **Misregistration.** Real riso offsets colour layers by a millimetre or two because the
-  paper shifts between passes. Offset the second colour layer by **2–4px** on both axes,
-  varied per seed. This single change is what makes it read as print rather than vector.
-- **Paper grain.** A low-opacity `feTurbulence` / `feColorMatrix` noise overlay across the
-  whole image, ~4–8% opacity.
-- **Ink density variation.** Vary shape opacity slightly (say 0.55–0.85) rather than using
-  one flat value, and let edges be marginally rough rather than mathematically perfect.
-
-### 2. The prose is the real risk
-
-These studios read writing for a living. Fluent, evenly-paced, structurally identical
-articles are the tell.
-
-- **Vary the shape of the publication.** Not 12 × 900 words. Four full articles, three short
-  notes of ~200 words, two single-paragraph fragments. That's how a real magazine
-  distributes.
-- **Concrete, checkable specifics.** "The Abergwesyn pass is unsurfaced for eleven miles"
-  reads as real. "A journey through beautiful landscape" reads as generated. Place names,
-  distances, dates, prices, tool gauges, timings.
-- **Write at least two pieces yourself.** Uneven human writing beats smooth machine writing
-  with this audience. It does not need to be good.
-
-### 3. Let it be irregular
-
-Every article the same length, every entry with an image, every row aligned — that evenness
-is itself a signal. Let one article run long, one carry no image, and the index hold an odd
-number of entries.
-
 ## One accent per view
 
 Ochre for editorial emphasis, moss for structural asides. Never both in the same component.
