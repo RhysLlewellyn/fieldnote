@@ -50,7 +50,19 @@ export default async function SiteLayout({
 
       {isDraft ? <DraftModeBanner /> : null}
       <SiteHeader />
-      <main id="main" className="flex-1">
+      {/* tabIndex={-1} is what makes the skip link above actually work.
+          Without it <main> is not a focusable target, and browsers disagree
+          about what to do: Chrome moves the sequential focus starting point
+          and the next Tab lands inside the content, Firefox leaves focus at
+          the top of the document, so a screen-reader user activates the skip
+          link and still tabs through the whole nav. Found by pressing
+          Tab-Enter-Tab in Firefox with NVDA running; an automated pass in
+          Chrome reported it working.
+
+          The outline is suppressed because this is a programmatic focus
+          target rather than an operable control, and a 2px ring around the
+          entire page is noise rather than information. */}
+      <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
         {children}
       </main>
       <SiteFooter />
