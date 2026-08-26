@@ -1,4 +1,5 @@
 import type {Metadata} from 'next'
+import {Analytics} from '@vercel/analytics/next'
 import {IBM_Plex_Mono, Newsreader} from 'next/font/google'
 import localFont from 'next/font/local'
 
@@ -89,7 +90,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       lang="en-GB"
       className={`${display.variable} ${body.variable} ${meta.variable}`}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">{children}<Analytics /></body>
     </html>
   )
 }
