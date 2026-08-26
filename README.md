@@ -4,8 +4,8 @@ A magazine site: [Next.js](https://nextjs.org) App Router on the front, [Sanity]
 
 The Studio is embedded at `/studio` rather than hosted separately, so there is one deploy, one domain, and one thing for an editor to bookmark.
 
-**Live site:** <https://fieldnote-one.vercel.app>
-**Studio:** <https://fieldnote-one.vercel.app/studio>
+**Live site:** <https://fieldnote.rhysllewellyn.dev>
+**Studio:** <https://fieldnote.rhysllewellyn.dev/studio>
 
 **▶ [Watch the Studio being used — 45 seconds](https://www.loom.com/share/6020346d544c4e5180092d1ecdab1f66)**
 Opening an article, changing the standfirst, watching that change render on the
@@ -20,8 +20,8 @@ default mobile profile — simulated 4G and a 4x CPU slowdown.
 
 | | Performance | Accessibility | Best Practices | SEO | Agentic Browsing |
 | --- | --- | --- | --- | --- | --- |
-| [Homepage](https://fieldnote-one.vercel.app) | 97 | 100 | 100 | 100 | 100 |
-| [Article](https://fieldnote-one.vercel.app/articles/tideline-moves-twice-a-day) | 95 | 100 | 100 | 100 | 100 |
+| [Homepage](https://fieldnote.rhysllewellyn.dev) | 97 | 100 | 100 | 100 | 100 |
+| [Article](https://fieldnote.rhysllewellyn.dev/articles/tideline-moves-twice-a-day) | 95 | 100 | 100 | 100 | 100 |
 
 Homepage: FCP 1.1s, LCP 2.6s, TBT 20ms, CLS 0, Speed Index 1.2s.
 Article: FCP 0.9s, LCP 2.9s, TBT 20ms, CLS 0, Speed Index 2.5s.
@@ -31,7 +31,7 @@ as under development. It measures whether a page is legible to an automated
 agent rather than only to a human reader or a search crawler: whether the
 accessibility tree it exposes is well-formed enough to be navigated
 programmatically, whether the layout is stable enough to act on, and whether
-the site states its own structure in [`/llms.txt`](https://fieldnote-one.vercel.app/llms.txt).
+the site states its own structure in [`/llms.txt`](https://fieldnote.rhysllewellyn.dev/llms.txt).
 That last audit reported nothing at all until the file existed.
 
 Performance is the only category that moves between runs. Across three
@@ -65,7 +65,7 @@ article on the site comes from here:
 https://wcyiz8up.api.sanity.io/v2026-08-19/data/query/production?query=*[_type=="article"]{title,"slug":slug.current,publishedAt}
 ```
 
-The Studio itself is at <https://fieldnote-one.vercel.app/studio> and needs a
+The Studio itself is at <https://fieldnote.rhysllewellyn.dev/studio> and needs a
 Sanity account — read-only Viewer access on request, same day. A Viewer sees
 what an editor sees and can change none of it: the field descriptions, the
 validation rules, and the side-by-side preview that renders a draft on the real
