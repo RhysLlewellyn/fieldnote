@@ -25,6 +25,8 @@ export async function SiteFooter() {
             ))}
           </ul>
         ) : null}
+
+        <p className="basis-full tracking-[0.02em]">Page views are counted by Vercel Web Analytics. No cookies, nothing stored on your device.</p>
       </div>
     </footer>
   )
